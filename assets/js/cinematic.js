@@ -1,14 +1,12 @@
 /* ============================================================
    Yash Chaudhari — Portfolio — cinematic.js
-   Milestone 1: immersive Three.js hero world.
-   "The Engineering Continuum" — a procedural blueprint terrain,
-   a self-assembling particle artifact, atmospheric fog, light
-   beams, and cinematic post-processing (bloom + grain + vignette).
-   Cyan/obsidian brand palette.
+   Atmospheric dusk world in the spirit of immersive WebGL
+   showcase sites: gradient sky, hazy horizon glow, sweeping
+   light streaks, a slow-rotating faceted crystal, and a lone
+   silhouette on a fog-bound plain. Magenta/violet dusk palette.
 
-   Falls back silently (CSS gradient) when WebGL is unavailable or
-   the user prefers reduced motion. Exposes window.__cinematic for
-   later scroll-choreography milestones.
+   Falls back to a CSS gradient when WebGL is unavailable or the
+   user prefers reduced motion.
    ============================================================ */
 import * as THREE from "three";
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
@@ -18,9 +16,12 @@ import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
 import { FilmPass } from "three/addons/postprocessing/FilmPass.js";
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 
-const PRIMARY = new THREE.Color(0x00c6ff);
-const SECONDARY = new THREE.Color(0x7b2ff7);
-const BG = new THREE.Color(0x070a10);
+const SKY_TOP = new THREE.Color(0x0a0712);
+const SKY_HORIZON = new THREE.Color(0xff5db3);
+const HORIZON_GLOW = new THREE.Color(0xff79c6);
+const VIOLET = new THREE.Color(0x7b2ff7);
+const MAGENTA = new THREE.Color(0xff3df0);
+const BG = new THREE.Color(0x080510);
 
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -31,7 +32,6 @@ function supportsWebGL() {
   } catch (e) { return false; }
 }
 
-/* Shared GLSL: Ashima simplex noise (snoise) */
 const NOISE_GLSL = `
 vec3 mod289(vec3 x){return x-floor(x*(1.0/289.0))*289.0;}
 vec4 mod289(vec4 x){return x-floor(x*(1.0/289.0))*289.0;}
@@ -67,219 +67,168 @@ function boot(canvas) {
   renderer.setClearColor(BG, 1);
 
   const scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(BG.getHex(), 0.024);
+  scene.fog = new THREE.FogExp2(0x180a22, 0.05);
 
-  const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 400);
-  camera.position.set(0, 6, 26);
-  camera.lookAt(0, 4, -40);
+  const camera = new THREE.PerspectiveCamera(58, window.innerWidth / window.innerHeight, 0.1, 600);
+  camera.position.set(0, 2.4, 16);
+  camera.lookAt(0, 3.2, -60);
 
   const uTime = { value: 0 };
 
-  /* ---------- Procedural blueprint terrain ---------- */
-  const terrainMat = new THREE.ShaderMaterial({
+  /* ---------- Sky dome (vertical dusk gradient + horizon glow) ---------- */
+  const sky = new THREE.Mesh(
+    new THREE.SphereGeometry(400, 32, 16),
+    new THREE.ShaderMaterial({
+      side: THREE.BackSide, depthWrite: false, fog: false,
+      uniforms: {
+        uTop: { value: SKY_TOP }, uHorizon: { value: SKY_HORIZON },
+        uGlow: { value: HORIZON_GLOW }, uTime: uTime
+      },
+      vertexShader: `varying vec3 vDir; void main(){ vDir=normalize(position); gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);} `,
+      fragmentShader: `
+        varying vec3 vDir; uniform vec3 uTop; uniform vec3 uHorizon; uniform vec3 uGlow; uniform float uTime;
+        void main(){
+          float h = clamp(vDir.y * 1.4 + 0.15, 0.0, 1.0);
+          vec3 col = mix(uHorizon, uTop, pow(h, 0.6));
+          // concentrated glow band just above the horizon
+          float band = smoothstep(0.22, 0.0, abs(vDir.y - 0.01));
+          col += uGlow * band * 0.42;
+          // faint front-facing sun bloom toward -z horizon centre
+          float centre = smoothstep(0.7, 1.0, -vDir.z) * smoothstep(0.18, 0.0, abs(vDir.y));
+          col += uGlow * centre * 0.28;
+          gl_FragColor = vec4(col, 1.0);
+        }`
+    })
+  );
+  scene.add(sky);
+
+  /* ---------- Fog-bound plain (dark, subtle undulation, faint reflsection of glow) ---------- */
+  const groundMat = new THREE.ShaderMaterial({
     transparent: true,
-    uniforms: {
-      uTime: uTime,
-      uPrimary: { value: PRIMARY },
-      uSecondary: { value: SECONDARY },
-      uFogColor: { value: BG },
-      uFogDensity: { value: 0.024 }
-    },
+    uniforms: { uTime: uTime, uGlow: { value: HORIZON_GLOW }, uViolet: { value: VIOLET } },
     vertexShader: NOISE_GLSL + `
-      varying vec3 vWorld; varying float vH;
-      uniform float uTime;
+      uniform float uTime; varying vec3 vWorld; varying float vH;
       void main(){
         vec3 p = position;
-        float h = fbm(vec3(p.x*0.035, p.y*0.035, uTime*0.05)) * 6.0;
-        h += fbm(vec3(p.x*0.12, p.y*0.12, uTime*0.03)) * 1.2;
-        p.z += h;
-        vH = h;
-        vec4 wp = modelMatrix * vec4(p,1.0);
-        vWorld = wp.xyz;
+        float h = fbm(vec3(p.x*0.03, p.y*0.03, uTime*0.03)) * 1.6;
+        p.z += h; vH = h;
+        vec4 wp = modelMatrix * vec4(p,1.0); vWorld = wp.xyz;
         gl_Position = projectionMatrix * viewMatrix * wp;
       }`,
     fragmentShader: `
-      varying vec3 vWorld; varying float vH;
-      uniform vec3 uPrimary; uniform vec3 uSecondary; uniform vec3 uFogColor; uniform float uFogDensity;
-      float gridLine(vec2 c){
-        vec2 g = abs(fract(c - 0.5) - 0.5) / fwidth(c);
-        return 1.0 - min(min(g.x, g.y), 1.0);
-      }
+      varying vec3 vWorld; varying float vH; uniform vec3 uGlow; uniform vec3 uViolet;
       void main(){
-        float g1 = gridLine(vWorld.xz * 0.5);
-        float g2 = gridLine(vWorld.xz * 0.1) * 1.4;
-        float grid = clamp(g1 * 0.5 + g2, 0.0, 1.0);
-        vec3 col = mix(uSecondary * 0.25, uPrimary, clamp(vH * 0.12 + 0.3, 0.0, 1.0));
-        float ridge = smoothstep(2.5, 6.0, vH);
-        col += uPrimary * ridge * 0.6;
-        float alpha = grid * (0.5 + ridge * 0.5);
-        // distance fog
-        float d = length(vWorld - cameraPosition);
-        float fog = 1.0 - exp(-uFogDensity * uFogDensity * d * d);
-        col = mix(col, uFogColor, fog);
-        alpha *= (1.0 - fog * 0.9);
-        if(alpha < 0.01) discard;
-        gl_FragColor = vec4(col, alpha);
+        float d = length(vWorld.xz - vec2(0.0, -60.0));
+        // glow reflected near horizon, fading to dark in the foreground
+        float horizonGlow = smoothstep(120.0, 20.0, d) * 0.5;
+        vec3 col = mix(vec3(0.02,0.01,0.04), uViolet*0.25, horizonGlow);
+        col += uGlow * smoothstep(0.6, 1.4, vH) * 0.15;
+        float distFade = 1.0 - smoothstep(40.0, 240.0, length(vWorld - cameraPosition));
+        gl_FragColor = vec4(col, distFade);
       }`
   });
-  terrainMat.extensions = { derivatives: true };
-  const terrain = new THREE.Mesh(new THREE.PlaneGeometry(600, 600, 320, 320), terrainMat);
-  terrain.rotation.x = -Math.PI / 2;
-  terrain.position.y = -2;
-  scene.add(terrain);
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(800, 800, 200, 200), groundMat);
+  ground.rotation.x = -Math.PI / 2;
+  ground.position.y = -0.2;
+  scene.add(ground);
 
-  /* ---------- Self-assembling particle artifact ---------- */
-  const ico = new THREE.IcosahedronGeometry(4.6, 20);
-  const artifactMat = new THREE.ShaderMaterial({
-    transparent: true,
-    depthWrite: false,
-    blending: THREE.AdditiveBlending,
-    uniforms: {
-      uTime: uTime,
-      uAssemble: { value: 0.0 },   // 0..1 driven later by scroll
-      uPrimary: { value: PRIMARY },
-      uSecondary: { value: SECONDARY }
-    },
-    vertexShader: NOISE_GLSL + `
-      uniform float uTime; uniform float uAssemble;
-      varying float vGlow;
-      void main(){
-        vec3 dir = normalize(position);
-        float n = fbm(position * 0.25 + vec3(0.0, 0.0, uTime * 0.15));
-        // exploded scatter -> assembled form as uAssemble goes 0..1
-        float scatter = (1.0 - uAssemble);
-        vec3 p = position + dir * (n * (2.5 + scatter * 16.0));
-        p += dir * sin(uTime * 0.6 + n * 6.28) * 0.4 * uAssemble;
-        vGlow = 0.35 + 0.5 * smoothstep(-0.5, 1.2, n);
-        vec4 mv = modelViewMatrix * vec4(p, 1.0);
-        gl_PointSize = (0.5 + vGlow * 1.1) * (150.0 / -mv.z);
-        gl_Position = projectionMatrix * mv;
-      }`,
-    fragmentShader: `
-      uniform vec3 uPrimary; uniform vec3 uSecondary;
-      varying float vGlow;
-      void main(){
-        vec2 uv = gl_PointCoord - 0.5;
-        float d = length(uv);
-        if(d > 0.5) discard;
-        float a = smoothstep(0.5, 0.0, d) * vGlow;
-        vec3 col = mix(uSecondary, uPrimary, vGlow);
-        gl_FragColor = vec4(col, a);
-      }`
-  });
-  const artifact = new THREE.Points(ico, artifactMat);
-  artifact.position.set(12.5, 8.5, -16);
-  scene.add(artifact);
-
-  /* a faint solid wire core inside the particles for density */
-  const core = new THREE.Mesh(
-    new THREE.IcosahedronGeometry(3.0, 1),
-    new THREE.MeshBasicMaterial({ color: PRIMARY, wireframe: true, transparent: true, opacity: 0.06 })
-  );
-  core.position.copy(artifact.position);
-  scene.add(core);
-
-  /* ---------- Starfield ---------- */
-  const starCount = 1400;
-  const starPos = new Float32Array(starCount * 3);
-  for (let i = 0; i < starCount; i++) {
-    const r = 120 + Math.random() * 180;
-    const th = Math.random() * Math.PI * 2;
-    const ph = Math.acos(2 * Math.random() - 1);
-    starPos[i * 3] = r * Math.sin(ph) * Math.cos(th);
-    starPos[i * 3 + 1] = Math.abs(r * Math.cos(ph)) * 0.5 + 10;
-    starPos[i * 3 + 2] = -Math.abs(r * Math.sin(ph) * Math.sin(th)) - 20;
-  }
-  const starGeo = new THREE.BufferGeometry();
-  starGeo.setAttribute("position", new THREE.BufferAttribute(starPos, 3));
-  const stars = new THREE.Points(starGeo, new THREE.PointsMaterial({
-    color: 0x9fdcff, size: 0.7, sizeAttenuation: true, transparent: true, opacity: 0.7, depthWrite: false
-  }));
-  scene.add(stars);
-
-  /* ---------- Horizon light beams (additive) ---------- */
-  const beamMat = new THREE.ShaderMaterial({
-    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
-    uniforms: { uTime: uTime, uColor: { value: PRIMARY } },
+  /* ---------- Sweeping light streaks across the sky ---------- */
+  const streakMat = new THREE.ShaderMaterial({
+    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide, fog: false,
+    uniforms: { uTime: uTime, uColor: { value: MAGENTA } },
     vertexShader: `varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);} `,
     fragmentShader: `
       varying vec2 vUv; uniform float uTime; uniform vec3 uColor;
       void main(){
-        float beam = smoothstep(0.5, 0.0, abs(vUv.x - 0.5));
-        float fade = smoothstep(0.0, 0.5, vUv.y) * smoothstep(1.0, 0.5, vUv.y);
-        float pulse = 0.5 + 0.5 * sin(uTime * 0.4 + vUv.x * 3.0);
-        gl_FragColor = vec4(uColor, beam * fade * 0.22 * pulse);
+        float core = smoothstep(0.5, 0.0, abs(vUv.y-0.5));
+        float len = smoothstep(0.0,0.15,vUv.x)*smoothstep(1.0,0.7,vUv.x);
+        float pulse = 0.55 + 0.45*sin(uTime*0.5 + vUv.x*4.0);
+        gl_FragColor = vec4(mix(uColor, vec3(1.0), core*0.5), core*len*0.5*pulse);
       }`
   });
-  const beams = new THREE.Group();
-  for (let i = 0; i < 3; i++) {
-    const b = new THREE.Mesh(new THREE.PlaneGeometry(120, 60), beamMat);
-    b.position.set(-20 + i * 20, 26, -90);
-    b.rotation.z = (i - 1) * 0.25;
-    beams.add(b);
+  const streaks = new THREE.Group();
+  for (let i = 0; i < 4; i++) {
+    const s = new THREE.Mesh(new THREE.PlaneGeometry(260, 2.2), streakMat);
+    s.position.set(0, 18 + i * 7, -120);
+    s.rotation.z = -0.18 + i * 0.07;
+    streaks.add(s);
   }
-  scene.add(beams);
+  scene.add(streaks);
+
+  /* ---------- Floating faceted crystal near the horizon ---------- */
+  const crystalGeo = new THREE.IcosahedronGeometry(2.3, 0);
+  const crystal = new THREE.Group();
+  const crystalSolid = new THREE.Mesh(
+    crystalGeo,
+    new THREE.MeshBasicMaterial({ color: 0x12091e, transparent: true, opacity: 0.85, fog: false })
+  );
+  const crystalWire = new THREE.LineSegments(
+    new THREE.EdgesGeometry(crystalGeo),
+    new THREE.LineBasicMaterial({ color: MAGENTA, transparent: true, opacity: 0.9, fog: false })
+  );
+  crystal.add(crystalSolid); crystal.add(crystalWire);
+  crystal.position.set(0, 4.2, -34);
+  crystal.scale.setScalar(1.3);
+  scene.add(crystal);
+
+  /* ---------- Lone silhouette on the plain ---------- */
+  const figure = new THREE.Group();
+  const matSil = new THREE.MeshBasicMaterial({ color: 0x05030a, fog: true });
+  const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.16, 0.7, 4, 8), matSil);
+  body.position.y = 0.55;
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.16, 12, 12), matSil);
+  head.position.y = 1.12;
+  figure.add(body); figure.add(head);
+  figure.position.set(1.4, 0, -16);
+  scene.add(figure);
+
+  /* faint rim glow behind the figure so it reads as a silhouette */
+  const rim = new THREE.Mesh(
+    new THREE.PlaneGeometry(3, 4),
+    new THREE.ShaderMaterial({
+      transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false,
+      uniforms: { uColor: { value: HORIZON_GLOW } },
+      vertexShader: `varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);} `,
+      fragmentShader: `varying vec2 vUv; uniform vec3 uColor; void main(){ float d=length(vUv-vec2(0.5,0.35)); gl_FragColor=vec4(uColor, smoothstep(0.5,0.0,d)*0.35);} `
+    })
+  );
+  rim.position.set(1.4, 0.9, -16.4);
+  scene.add(rim);
 
   /* ---------- Post-processing ---------- */
   const composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
-
-  const bloom = new UnrealBloomPass(
-    new THREE.Vector2(window.innerWidth, window.innerHeight), 0.5, 0.5, 0.9
-  );
+  const bloom = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 0.5, 0.7, 0.82);
   composer.addPass(bloom);
-
-  const film = new FilmPass(0.32, false);
-  composer.addPass(film);
-
-  const VignetteShader = {
-    uniforms: { tDiffuse: { value: null }, uStrength: { value: 1.1 }, uOffset: { value: 1.0 } },
+  composer.addPass(new FilmPass(0.28, false));
+  const Vignette = {
+    uniforms: { tDiffuse: { value: null }, uStrength: { value: 1.15 } },
     vertexShader: `varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);} `,
-    fragmentShader: `
-      varying vec2 vUv; uniform sampler2D tDiffuse; uniform float uStrength; uniform float uOffset;
-      void main(){
-        vec4 c = texture2D(tDiffuse, vUv);
-        vec2 uv = (vUv - 0.5) * uOffset;
-        float v = smoothstep(0.85, 0.2, dot(uv, uv) * uStrength);
-        c.rgb *= mix(0.55, 1.0, v);
-        gl_FragColor = c;
-      }`
+    fragmentShader: `varying vec2 vUv; uniform sampler2D tDiffuse; uniform float uStrength;
+      void main(){ vec4 c=texture2D(tDiffuse,vUv); vec2 uv=(vUv-0.5); float v=smoothstep(0.85,0.2,dot(uv,uv)*uStrength); c.rgb*=mix(0.45,1.0,v); gl_FragColor=c; }`
   };
-  composer.addPass(new ShaderPass(VignetteShader));
+  composer.addPass(new ShaderPass(Vignette));
   composer.addPass(new OutputPass());
 
-  /* ---------- Interaction: mouse parallax + scroll hook ---------- */
+  /* ---------- Interaction ---------- */
   const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
   window.addEventListener("pointermove", (e) => {
     pointer.tx = (e.clientX / window.innerWidth - 0.5);
     pointer.ty = (e.clientY / window.innerHeight - 0.5);
   });
+  const state = { scroll: 0 };
+  window.__cinematic = { setScroll(p) { state.scroll = p; } };
 
-  // Exposed for later scroll-choreography milestones.
-  const state = { scroll: 0, assemble: 0 };
-  window.__cinematic = {
-    setScroll(p) { state.scroll = p; },           // 0..1 page progress
-    setAssemble(a) { state.assemble = a; }         // 0..1 artifact build
-  };
-  // Hero-only auto-assemble on load so it feels alive immediately.
-  let booted = performance.now();
-
-  /* ---------- Resize ---------- */
   function onResize() {
     const w = window.innerWidth, h = window.innerHeight;
     camera.aspect = w / h; camera.updateProjectionMatrix();
-    renderer.setSize(w, h); composer.setSize(w, h);
-    bloom.setSize(w, h);
+    renderer.setSize(w, h); composer.setSize(w, h); bloom.setSize(w, h);
   }
   window.addEventListener("resize", onResize);
 
-  /* ---------- Render loop (pauses when tab hidden) ---------- */
   const clock = new THREE.Clock();
   let running = true;
-  document.addEventListener("visibilitychange", () => {
-    running = !document.hidden;
-    if (running) clock.start();
-  });
+  document.addEventListener("visibilitychange", () => { running = !document.hidden; if (running) clock.start(); });
 
   function animate() {
     requestAnimationFrame(animate);
@@ -287,32 +236,23 @@ function boot(canvas) {
     const dt = Math.min(clock.getDelta(), 0.05);
     uTime.value += dt;
 
-    // intro assemble (0->1 over ~3.5s) unless scroll-driven later
-    const introT = Math.min((performance.now() - booted) / 3500, 1);
-    const ease = 1 - Math.pow(1 - introT, 3);
-    artifactMat.uniforms.uAssemble.value = Math.max(ease, state.assemble);
+    crystal.rotation.y += dt * 0.18;
+    crystal.rotation.x = Math.sin(uTime.value * 0.2) * 0.12;
+    crystal.position.y = 4.2 + Math.sin(uTime.value * 0.5) * 0.25;
 
-    artifact.rotation.y += dt * 0.12;
-    artifact.rotation.x = Math.sin(uTime.value * 0.15) * 0.15;
-    core.rotation.copy(artifact.rotation);
-    stars.rotation.y += dt * 0.005;
-
-    // parallax + subtle scroll dolly
     pointer.x += (pointer.tx - pointer.x) * 0.04;
     pointer.y += (pointer.ty - pointer.y) * 0.04;
-    camera.position.x = pointer.x * 4;
-    camera.position.y = 6 - pointer.y * 2 + state.scroll * 2;
-    camera.lookAt(0, 5, -40);
+    camera.position.x = pointer.x * 2.4;
+    camera.position.y = 2.4 - pointer.y * 1.0 + state.scroll * 1.5;
+    camera.lookAt(0, 3.2, -60);
 
     composer.render();
   }
   animate();
-
-  // reveal canvas once first frame is ready
   requestAnimationFrame(() => canvas.classList.add("ready"));
 }
 
-/* ---------- Entry point (after all consts initialized) ---------- */
+/* ---------- Entry point ---------- */
 const heroCanvas = document.getElementById("cinematic-canvas");
 if (!heroCanvas || reduceMotion || !supportsWebGL()) {
   document.body.classList.add("cinematic-off");

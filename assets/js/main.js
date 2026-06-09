@@ -212,6 +212,19 @@
     setTimeout(hide, reduceMotion ? 200 : 1800);
   })();
 
+  /* ---------- Scroll progress rail + cinematic scroll hook ---------- */
+  (function scrollProgress() {
+    var fill = document.getElementById("progress-fill");
+    function update() {
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      var p = max > 0 ? window.scrollY / max : 0;
+      if (fill) fill.style.height = (p * 100).toFixed(2) + "%";
+      if (window.__cinematic) window.__cinematic.setScroll(p);
+    }
+    window.addEventListener("scroll", update, { passive: true });
+    update();
+  })();
+
   /* ---------- Mobile nav toggle ---------- */
   (function mobileNav() {
     var btn = document.getElementById("nav-toggle");

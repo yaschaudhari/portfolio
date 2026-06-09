@@ -29,6 +29,7 @@
 <canvas id="cinematic-canvas"></canvas>
 <div class="cinematic-fallback" aria-hidden="true"></div>
 <div class="cinematic-grain" aria-hidden="true"></div>
+<div class="progress-rail" aria-hidden="true"><span id="progress-fill"></span></div>
 
 <!-- Custom cursor -->
 <div id="cursor-dot"></div>
@@ -67,40 +68,41 @@
   </div>
 </nav>
 
-<!-- Hero -->
-<section id="top" class="relative min-h-screen flex items-center pt-24 pb-12 overflow-hidden border-b border-outline-variant/30">
-  <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full relative z-10 grid grid-cols-1 md:grid-cols-12 gap-gutter">
-    <div class="md:col-span-8 flex flex-col justify-center">
-      <div class="mb-6 inline-flex items-center gap-2 font-code-sm text-primary uppercase tracking-widest text-sm border border-primary/30 px-3 py-1 rounded bg-primary/5 w-max">
-        <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span> System Initialized
-      </div>
-      <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-6">
-        Yash Santosh Chaudhari
-      </h1>
-      <div class="h-12 mb-8">
-        <p class="font-code-sm text-body-lg text-on-surface-variant flex items-center">
-          <span class="material-symbols-outlined mr-2 text-primary opacity-70">terminal</span>
-          <span class="text-secondary" id="typewriter-text" data-phrases="Healthcare SaaS Developer|AI Tooling Builder|CAD/CAM Automation Engineer|Enterprise Platform Builder"></span><span class="typewriter-cursor"></span>
-        </p>
-      </div>
-      <p class="font-body-md text-body-lg text-on-surface-variant max-w-2xl mb-8 leading-relaxed">
-        Building scalable healthcare platforms, AI-powered business systems, and engineering automation that solve real-world operational challenges.
-      </p>
-      <div class="flex flex-wrap gap-4">
-        <a class="btn-primary px-8 py-3 font-code-sm text-sm uppercase tracking-wider hover-target inline-flex items-center gap-2 transition-transform hover:scale-105" href="#projects">
-          <span class="material-symbols-outlined text-[18px]">folder_open</span> View Projects
-        </a>
-        <a class="btn-ghost px-8 py-3 font-code-sm text-sm uppercase tracking-wider hover-target inline-flex items-center gap-2" href="#contact">
-          <span class="material-symbols-outlined text-[18px]">mail</span> Get In Touch
-        </a>
-      </div>
-    </div>
-    <div class="hidden md:block md:col-span-4" aria-hidden="true"></div>
+<!-- Hero — cinematic HUD overlay -->
+<section id="top" class="relative min-h-screen overflow-hidden">
+  <!-- Mission panel (upper-left) -->
+  <div class="hud-panel absolute top-28 left-margin-mobile md:left-margin-desktop max-w-xs reveal-now">
+    <div class="hud-panel-label">[ MISSION ]</div>
+    <p class="font-code-sm text-xs text-on-surface-variant leading-relaxed mt-2 uppercase tracking-wider">
+      Building healthcare platforms, AI systems &amp; engineering automation — beyond the ordinary.
+    </p>
   </div>
-  <a href="#about" class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-outline-variant hover:text-primary transition-colors hover-target" style="animation: bounce 3s infinite;">
-    <span class="font-label-caps text-label-caps">SCROLL</span>
-    <span class="material-symbols-outlined">arrow_downward</span>
+
+  <!-- Central statement -->
+  <div class="absolute inset-0 flex flex-col justify-center px-margin-mobile md:px-margin-desktop">
+    <div class="max-w-container-max mx-auto w-full">
+      <div class="hud-eyebrow reveal-now">
+        <span class="w-1.5 h-1.5 rounded-full bg-[#ff5db3] animate-pulse"></span>
+        PORTFOLIO // 2026 — AVAILABLE FOR WORK
+      </div>
+      <h1 class="hero-name reveal-now">Yash Santosh<br/>Chaudhari</h1>
+      <p class="font-code-sm text-body-lg text-on-surface-variant flex items-center mt-6 reveal-now">
+        <span class="text-[#ff5db3] mr-2">&#9656;</span>
+        <span id="typewriter-text" data-phrases="Healthcare SaaS Developer|AI Tooling Builder|CAD/CAM Automation Engineer"></span><span class="typewriter-cursor"></span>
+      </p>
+    </div>
+  </div>
+
+  <!-- Scroll cue (bottom-centre) -->
+  <a href="#about" class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-on-surface-variant hover:text-white transition-colors hover-target">
+    <span class="font-label-caps text-label-caps tracking-[0.25em]">SCROLL TO DISCOVER</span>
+    <span class="scroll-rail"><span class="scroll-rail-dot"></span></span>
   </a>
+
+  <!-- Corner index (bottom-left) -->
+  <div class="absolute bottom-8 left-margin-mobile md:left-margin-desktop hidden md:block font-code-sm text-[10px] text-outline-variant tracking-widest uppercase">
+    01 — Origin<br/>Healthcare · AI · Manufacturing
+  </div>
 </section>
 
 <!-- About -->
