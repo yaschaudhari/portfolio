@@ -25,10 +25,10 @@
 </head>
 <body class="font-body-md text-on-surface antialiased">
 
-<!-- Shader background -->
-<div class="fixed inset-0 w-full h-full -z-10 bg-background">
-  <canvas id="shader-canvas" style="display:block;width:100%;height:100%"></canvas>
-</div>
+<!-- Cinematic 3D world (Milestone 1) -->
+<canvas id="cinematic-canvas"></canvas>
+<div class="cinematic-fallback" aria-hidden="true"></div>
+<div class="cinematic-grain" aria-hidden="true"></div>
 
 <!-- Custom cursor -->
 <div id="cursor-dot"></div>
@@ -95,12 +95,7 @@
         </a>
       </div>
     </div>
-    <div class="hidden md:flex md:col-span-4 items-center justify-center relative">
-      <div class="w-64 h-64 border border-outline-variant/50 rounded-full flex items-center justify-center relative" style="animation: spin 60s linear infinite;">
-        <div class="w-48 h-48 border border-primary/30 rounded-full border-dashed" style="animation: spin 40s linear infinite reverse;"></div>
-        <div class="absolute inset-0 flex items-center justify-center font-code-sm text-[10px] text-outline-variant/50 tracking-[0.2em] uppercase">Data Stream Active</div>
-      </div>
-    </div>
+    <div class="hidden md:block md:col-span-4" aria-hidden="true"></div>
   </div>
   <a href="#about" class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-outline-variant hover:text-primary transition-colors hover-target" style="animation: bounce 3s infinite;">
     <span class="font-label-caps text-label-caps">SCROLL</span>
@@ -109,7 +104,7 @@
 </section>
 
 <!-- About -->
-<section class="py-24 border-b border-outline-variant/30 bg-surface-container-lowest/30 relative" id="about">
+<section class="py-24 border-b border-outline-variant/30 bg-surface-container-lowest/80 backdrop-blur-md relative" id="about">
   <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
     <div class="flex items-center gap-4 mb-16 reveal">
       <span class="font-code-sm text-secondary text-sm">01.</span>
@@ -150,7 +145,7 @@
 </section>
 
 <!-- Projects -->
-<section class="py-24 border-b border-outline-variant/30 relative" id="projects">
+<section class="py-24 border-b border-outline-variant/30 bg-background/80 backdrop-blur-md relative" id="projects">
   <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
     <div class="flex items-center gap-4 mb-16 reveal">
       <span class="font-code-sm text-secondary text-sm">02.</span>
@@ -232,7 +227,7 @@
 </section>
 
 <!-- Skills -->
-<section class="py-24 border-b border-outline-variant/30 bg-surface-container-lowest/30 relative overflow-hidden" id="skills">
+<section class="py-24 border-b border-outline-variant/30 bg-surface-container-lowest/80 backdrop-blur-md relative overflow-hidden" id="skills">
   <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop mb-16">
     <div class="flex items-center gap-4 reveal">
       <span class="font-code-sm text-secondary text-sm">03.</span>
@@ -310,7 +305,7 @@
 </section>
 
 <!-- Contact -->
-<section class="py-24 relative" id="contact">
+<section class="py-24 relative bg-background/80 backdrop-blur-md" id="contact">
   <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
     <div class="flex items-center gap-4 mb-16 reveal">
       <span class="font-code-sm text-secondary text-sm">04.</span>
@@ -365,6 +360,16 @@
 </footer>
 
 <style>@keyframes spin{to{transform:rotate(360deg)}}@keyframes bounce{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,-8px)}}</style>
+<!-- Three.js (pinned CDN — vendor before launch) -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+<script type="module" src="assets/js/cinematic.js"></script>
 <script src="assets/js/vanilla-tilt.min.js" defer></script>
 <script src="assets/js/main.js" defer></script>
 </body>

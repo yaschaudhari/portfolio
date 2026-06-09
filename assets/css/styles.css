@@ -18,9 +18,48 @@
 html { scroll-behavior: smooth; }
 
 body {
-  background-color: transparent;
+  background-color: var(--bg-deep);
   color: var(--on-surface);
   overflow-x: hidden;
+}
+
+/* ---- Cinematic 3D world (Milestone 1) ---- */
+#cinematic-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -10;
+  display: block;
+  opacity: 0;
+  transition: opacity 1.2s ease-out;
+}
+#cinematic-canvas.ready { opacity: 1; }
+
+/* Fallback gradient (mobile / reduced-motion / no WebGL) */
+.cinematic-fallback {
+  position: fixed;
+  inset: 0;
+  z-index: -11;
+  background:
+    radial-gradient(120% 80% at 50% 110%, rgba(0, 198, 255, 0.18), transparent 60%),
+    radial-gradient(90% 60% at 80% -10%, rgba(123, 47, 247, 0.16), transparent 55%),
+    var(--bg-deep);
+}
+body.cinematic-off #cinematic-canvas { display: none; }
+
+/* Film-grain + vignette overlay (kept subtle; complements WebGL grain) */
+.cinematic-grain {
+  position: fixed;
+  inset: 0;
+  z-index: -9;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 120% at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
+  mix-blend-mode: multiply;
+}
+@media (prefers-reduced-motion: reduce) {
+  #cinematic-canvas { display: none; }
 }
 
 /* Custom cursor — only on devices with a fine pointer (mouse) */
