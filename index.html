@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html class="dark scroll-smooth" lang="en">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<title>Yash Santosh Chaudhari — Healthcare SaaS · AI Tooling · CAD/CAM Automation</title>
+<meta name="description" content="Yash Santosh Chaudhari — software developer building scalable healthcare platforms, AI-powered business systems, and CAD/CAM manufacturing automation." />
+<meta name="author" content="Yash Santosh Chaudhari" />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<!-- Open Graph -->
+<meta property="og:title" content="Yash Santosh Chaudhari — Developer Portfolio" />
+<meta property="og:description" content="Healthcare SaaS developer, AI tooling builder & CAD/CAM automation engineer." />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="assets/img/og-cover.png" />
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect" />
+<link crossorigin href="https://fonts.gstatic.com" rel="preconnect" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL@20..48,100..700,0..1&display=swap" rel="stylesheet" />
+<!-- Tailwind (Play CDN — compiled to static CSS before launch) -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="assets/js/tailwind-config.js"></script>
+<link href="assets/css/styles.css" rel="stylesheet" />
+<style>.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'opsz' 24}</style>
+</head>
+<body class="font-body-md text-on-surface antialiased">
+
+<!-- Shader background -->
+<div class="fixed inset-0 w-full h-full -z-10 bg-background">
+  <canvas id="shader-canvas" style="display:block;width:100%;height:100%"></canvas>
+</div>
+
+<!-- Custom cursor -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<!-- Loader -->
+<div class="fixed inset-0 z-[100] bg-black flex items-center justify-center transition-opacity duration-500" id="loader">
+  <svg class="text-primary" fill="none" height="120" viewBox="0 0 100 100" width="120" xmlns="http://www.w3.org/2000/svg">
+    <text class="animate-draw" dominant-baseline="middle" fill="none" font-family="'Space Grotesk', sans-serif" font-size="40" font-weight="700" stroke="currentColor" stroke-width="2" text-anchor="middle" x="50" y="55">YC</text>
+  </svg>
+</div>
+
+<!-- Nav -->
+<nav class="fixed top-0 w-full z-50 bg-background/60 backdrop-blur-xl border-b border-outline-variant/30 px-margin-mobile md:px-margin-desktop py-4">
+  <div class="max-w-container-max mx-auto flex justify-between items-center">
+    <a class="font-display-lg text-headline-sm font-bold text-primary tracking-tighter hover-target" href="#top">YC</a>
+    <div class="hidden md:flex gap-8 items-center">
+      <a class="text-on-surface-variant hover:text-primary transition-colors duration-300 hover-target font-code-sm uppercase tracking-widest text-xs" href="#about">About</a>
+      <a class="text-on-surface-variant hover:text-primary transition-colors duration-300 hover-target font-code-sm uppercase tracking-widest text-xs" href="#projects">Projects</a>
+      <a class="text-on-surface-variant hover:text-primary transition-colors duration-300 hover-target font-code-sm uppercase tracking-widest text-xs" href="#skills">Skills</a>
+      <a class="text-on-surface-variant hover:text-primary transition-colors duration-300 hover-target font-code-sm uppercase tracking-widest text-xs" href="#contact">Contact</a>
+    </div>
+    <div class="flex items-center gap-3">
+      <a class="btn-ghost px-6 py-2 font-code-sm text-sm uppercase tracking-wider hover-target hidden sm:inline-block" href="resume.pdf" target="_blank" rel="noopener">Résumé</a>
+      <button id="nav-toggle" class="md:hidden text-on-surface hover-target" aria-label="Toggle menu">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+    </div>
+  </div>
+  <div id="nav-mobile" class="hidden md:hidden mt-4 pt-4 border-t border-outline-variant/30 flex-col gap-4 max-w-container-max mx-auto">
+    <a class="block py-1 text-on-surface-variant hover:text-primary font-code-sm uppercase tracking-widest text-xs" href="#about">About</a>
+    <a class="block py-1 text-on-surface-variant hover:text-primary font-code-sm uppercase tracking-widest text-xs" href="#projects">Projects</a>
+    <a class="block py-1 text-on-surface-variant hover:text-primary font-code-sm uppercase tracking-widest text-xs" href="#skills">Skills</a>
+    <a class="block py-1 text-on-surface-variant hover:text-primary font-code-sm uppercase tracking-widest text-xs" href="#contact">Contact</a>
+    <a class="block py-1 text-primary font-code-sm uppercase tracking-widest text-xs" href="resume.pdf" target="_blank" rel="noopener">Résumé</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section id="top" class="relative min-h-screen flex items-center pt-24 pb-12 overflow-hidden border-b border-outline-variant/30">
+  <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full relative z-10 grid grid-cols-1 md:grid-cols-12 gap-gutter">
+    <div class="md:col-span-8 flex flex-col justify-center">
+      <div class="mb-6 inline-flex items-center gap-2 font-code-sm text-primary uppercase tracking-widest text-sm border border-primary/30 px-3 py-1 rounded bg-primary/5 w-max">
+        <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span> System Initialized
+      </div>
+      <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface mb-6">
+        Yash Santosh Chaudhari
+      </h1>
+      <div class="h-12 mb-8">
+        <p class="font-code-sm text-body-lg text-on-surface-variant flex items-center">
+          <span class="material-symbols-outlined mr-2 text-primary opacity-70">terminal</span>
+          <span class="text-secondary" id="typewriter-text" data-phrases="Healthcare SaaS Developer|AI Tooling Builder|CAD/CAM Automation Engineer|Enterprise Platform Builder"></span><span class="typewriter-cursor"></span>
+        </p>
+      </div>
+      <p class="font-body-md text-body-lg text-on-surface-variant max-w-2xl mb-8 leading-relaxed">
+        Building scalable healthcare platforms, AI-powered business systems, and engineering automation that solve real-world operational challenges.
+      </p>
+      <div class="flex flex-wrap gap-4">
+        <a class="btn-primary px-8 py-3 font-code-sm text-sm uppercase tracking-wider hover-target inline-flex items-center gap-2 transition-transform hover:scale-105" href="#projects">
+          <span class="material-symbols-outlined text-[18px]">folder_open</span> View Projects
+        </a>
+        <a class="btn-ghost px-8 py-3 font-code-sm text-sm uppercase tracking-wider hover-target inline-flex items-center gap-2" href="#contact">
+          <span class="material-symbols-outlined text-[18px]">mail</span> Get In Touch
+        </a>
+      </div>
+    </div>
+    <div class="hidden md:flex md:col-span-4 items-center justify-center relative">
+      <div class="w-64 h-64 border border-outline-variant/50 rounded-full flex items-center justify-center relative" style="animation: spin 60s linear infinite;">
+        <div class="w-48 h-48 border border-primary/30 rounded-full border-dashed" style="animation: spin 40s linear infinite reverse;"></div>
+        <div class="absolute inset-0 flex items-center justify-center font-code-sm text-[10px] text-outline-variant/50 tracking-[0.2em] uppercase">Data Stream Active</div>
+      </div>
+    </div>
+  </div>
+  <a href="#about" class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-outline-variant hover:text-primary transition-colors hover-target" style="animation: bounce 3s infinite;">
+    <span class="font-label-caps text-label-caps">SCROLL</span>
+    <span class="material-symbols-outlined">arrow_downward</span>
+  </a>
+</section>
+
+<!-- About -->
+<section class="py-24 border-b border-outline-variant/30 bg-surface-container-lowest/30 relative" id="about">
+  <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+    <div class="flex items-center gap-4 mb-16 reveal">
+      <span class="font-code-sm text-secondary text-sm">01.</span>
+      <h2 class="font-headline-md text-headline-md uppercase tracking-wider">System Overview</h2>
+      <div class="h-px bg-outline-variant/30 flex-grow"></div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter reveal">
+      <div class="lg:col-span-7 glass-card p-8 rounded-lg relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-[#7b2ff7]"></div>
+        <div class="absolute top-4 right-4 font-code-sm text-outline-variant text-[10px]">IDX: BIO_01</div>
+        <p class="font-body-md text-body-lg text-on-surface-variant mb-6 leading-relaxed">
+          I'm a software developer with a unique combination of healthcare technology, AI automation, and manufacturing engineering experience. My background spans building large-scale clinic and hospital management platforms, developing intelligent business workflows, and creating CAD/CAM automation systems for manufacturing.
+        </p>
+        <p class="font-body-md text-body-lg text-on-surface-variant leading-relaxed">
+          I focus on delivering secure, scalable, and user-centric solutions that improve operational efficiency and drive business growth — bringing an engineer's precision and a systems mindset to everything I build.
+        </p>
+      </div>
+      <div class="lg:col-span-5 grid grid-cols-2 gap-4">
+        <div class="glass-card p-6 flex flex-col justify-center items-center text-center rounded border-t border-t-[#7b2ff7]/50">
+          <div class="font-display-lg text-4xl text-primary font-bold mb-2 stat-counter" data-target="3">0</div>
+          <div class="font-code-sm text-xs text-on-surface-variant uppercase tracking-widest">Platforms Built</div>
+        </div>
+        <div class="glass-card p-6 flex flex-col justify-center items-center text-center rounded border-t border-t-[#7b2ff7]/50">
+          <div class="font-display-lg text-4xl text-primary font-bold mb-2 flex items-center"><span class="stat-counter" data-target="30">0</span>+</div>
+          <div class="font-code-sm text-xs text-on-surface-variant uppercase tracking-widest">Modules Shipped</div>
+        </div>
+        <div class="glass-card p-6 flex flex-col justify-center items-center text-center rounded border-t border-t-[#7b2ff7]/50">
+          <div class="font-display-lg text-4xl text-primary font-bold mb-2 stat-counter" data-target="6">0</div>
+          <div class="font-code-sm text-xs text-on-surface-variant uppercase tracking-widest">User Roles (RBAC)</div>
+        </div>
+        <div class="glass-card p-6 flex flex-col justify-center items-center text-center rounded border-t border-t-[#7b2ff7]/50">
+          <div class="font-display-lg text-4xl text-primary font-bold mb-2 stat-counter" data-target="2">0</div>
+          <div class="font-code-sm text-xs text-on-surface-variant uppercase tracking-widest">Industries Served</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Projects -->
+<section class="py-24 border-b border-outline-variant/30 relative" id="projects">
+  <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+    <div class="flex items-center gap-4 mb-16 reveal">
+      <span class="font-code-sm text-secondary text-sm">02.</span>
+      <h2 class="font-headline-md text-headline-md uppercase tracking-wider">Key Deployments</h2>
+      <div class="h-px bg-outline-variant/30 flex-grow"></div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+      <!-- Kogmed -->
+      <div class="glass-card rounded-lg overflow-hidden flex flex-col reveal" data-tilt>
+        <div class="p-6 flex-grow">
+          <div class="flex justify-between items-start mb-4">
+            <span class="material-symbols-outlined text-primary text-4xl">medical_services</span>
+            <span class="font-code-sm text-[10px] uppercase tracking-widest px-2 py-1 bg-primary/10 text-primary border border-primary/20 rounded">Healthcare</span>
+          </div>
+          <h3 class="font-headline-sm text-headline-sm mb-2 text-on-surface">Kogmed</h3>
+          <p class="font-body-md text-on-surface-variant mb-6 text-sm leading-relaxed">Enterprise healthcare management platform for multi-speciality hospitals and clinics — multi-centre scheduling, real-time slot booking with concurrency protection, billing &amp; payments, and role-based security governance.</p>
+          <div class="flex flex-wrap gap-2 mb-2">
+            <span class="font-code-sm text-xs px-2 py-1 bg-surface-variant rounded text-on-surface">PHP</span>
+            <span class="font-code-sm text-xs px-2 py-1 bg-surface-variant rounded text-on-surface">MySQL</span>
+            <span class="font-code-sm text-xs px-2 py-1 bg-surface-variant rounded text-on-surface">Bootstrap 5</span>
+            <span class="font-code-sm text-xs px-2 py-1 bg-surface-variant rounded text-on-surface">Razorpay</span>
+          </div>
+        </div>
+        <div class="p-6 border-t border-outline-variant/30 flex gap-4">
+          <a class="text-sm font-code-sm uppercase tracking-wider text-primary hover:text-white transition-colors flex items-center gap-1 hover-target" href="projects/kogmed.html">
+            <span class="material-symbols-outlined text-[16px]">visibility</span> View Project
+          </a>
+        </div>
+      </div>
+
+      <!-- DocTecq PMS -->
+      <div class="glass-card rounded-lg overflow-hidden flex flex-col reveal" data-tilt>
+        <div class="p-6 flex-grow">
+          <div class="flex justify-between items-start mb-4">
+            <span class="material-symbols-outlined text-primary text-4xl">monitor_heart</span>
+            <span class="font-code-sm text-[10px] uppercase tracking-widest px-2 py-1 bg-primary/10 text-primary border border-primary/20 rounded">SaaS</span>
+          </div>
+          <h3 class="font-headline-sm text-headline-sm mb-2 text-on-surface">DocTecq PMS</h3>
+          <p class="font-body-md text-on-surface-variant mb-6 text-sm leading-relaxed">Multi-tenant practice management for dental &amp; medical clinics — registration, scheduling, clinical workflows, dental charting, billing &amp; collections, inventory/lab modules, and a Progressive Web App experience.</p>
+          <div class="flex flex-wrap gap-2 mb-2">
+            <span class="font-code-sm text-xs px-2 py-1 bg-surface-variant rounded text-on-surface">PHP</span>
+            <span class="font-code-sm text-xs px-2 py-1 bg-surface-variant rounded text-on-surface">MySQL</span>
+            <span class="font-code-sm text-xs px-2 py-1 bg-surface-variant rounded text-on-surface">PWA</span>
+            <span class="font-code-sm text-xs px-2 py-1 bg-surface-variant rounded text-on-surface">Chart.js</span>
+          </div>
+        </div>
+        <div class="p-6 border-t border-outline-variant/30 flex gap-4">
+          <a class="text-sm font-code-sm uppercase tracking-wider text-primary hover:text-white transition-colors flex items-center gap-1 hover-target" href="projects/doctecq.html">
+            <span class="material-symbols-outlined text-[16px]">visibility</span> View Project
+          </a>
+        </div>
+      </div>
+
+      <!-- CAD/CAM -->
+      <div class="glass-card rounded-lg overflow-hidden flex flex-col reveal" data-tilt>
+        <div class="p-6 flex-grow">
+          <div class="flex justify-between items-start mb-4">
+            <span class="material-symbols-outlined text-primary text-4xl">precision_manufacturing</span>
+            <span class="font-code-sm text-[10px] uppercase tracking-widest px-2 py-1 bg-[#28f280]/10 text-[#28f280] border border-[#28f280]/20 rounded">In Development</span>
+          </div>
+          <h3 class="font-headline-sm text-headline-sm mb-2 text-on-surface">CAD/CAM Automation</h3>
+          <p class="font-body-md text-on-surface-variant mb-6 text-sm leading-relaxed">AI-assisted engineering automation for CNC/VMC workflows — CAD geometry analysis, automated machining-strategy &amp; tool selection, and CAM workflow automation. Industry focus: aluminium extrusion die manufacturing.</p>
+          <div class="flex flex-wrap gap-2 mb-2">
+            <span class="font-code-sm text-xs px-2 py-1 bg-surface-variant rounded text-on-surface">Fusion 360</span>
+            <span class="font-code-sm text-xs px-2 py-1 bg-surface-variant rounded text-on-surface">Python</span>
+            <span class="font-code-sm text-xs px-2 py-1 bg-surface-variant rounded text-on-surface">AI Workflows</span>
+          </div>
+        </div>
+        <div class="p-6 border-t border-outline-variant/30 flex gap-4">
+          <span class="text-sm font-code-sm uppercase tracking-wider text-outline-variant flex items-center gap-1">
+            <span class="material-symbols-outlined text-[16px]">schedule</span> Coming Soon
+          </span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Skills -->
+<section class="py-24 border-b border-outline-variant/30 bg-surface-container-lowest/30 relative overflow-hidden" id="skills">
+  <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop mb-16">
+    <div class="flex items-center gap-4 reveal">
+      <span class="font-code-sm text-secondary text-sm">03.</span>
+      <h2 class="font-headline-md text-headline-md uppercase tracking-wider">Technical Arsenal</h2>
+      <div class="h-px bg-outline-variant/30 flex-grow"></div>
+    </div>
+  </div>
+
+  <div class="w-full overflow-hidden bg-primary/5 py-4 border-y border-primary/20 mb-16 reveal flex whitespace-nowrap group">
+    <div class="animate-marquee group-hover:[animation-play-state:paused] flex gap-12 font-display-lg text-4xl text-on-surface opacity-50 uppercase tracking-wider font-bold pl-12">
+      <span>Python</span><span class="text-primary">•</span>
+      <span>Flask</span><span class="text-primary">•</span>
+      <span>MySQL</span><span class="text-primary">•</span>
+      <span>Gemini API</span><span class="text-primary">•</span>
+      <span>PHP</span><span class="text-primary">•</span>
+      <span>JavaScript</span><span class="text-primary">•</span>
+      <span>Fusion 360</span><span class="text-primary">•</span>
+      <span>CAD/CAM</span><span class="text-primary">•</span>
+      <span>REST APIs</span><span class="text-primary">•</span>
+      <span>Automation</span><span class="text-primary">•</span>
+      <!-- duplicate for seamless loop -->
+      <span>Python</span><span class="text-primary">•</span>
+      <span>Flask</span><span class="text-primary">•</span>
+      <span>MySQL</span><span class="text-primary">•</span>
+      <span>Gemini API</span><span class="text-primary">•</span>
+      <span>PHP</span><span class="text-primary">•</span>
+      <span>JavaScript</span><span class="text-primary">•</span>
+      <span>Fusion 360</span><span class="text-primary">•</span>
+      <span>CAD/CAM</span><span class="text-primary">•</span>
+      <span>REST APIs</span><span class="text-primary">•</span>
+      <span>Automation</span><span class="text-primary">•</span>
+    </div>
+  </div>
+
+  <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="glass-card p-8 rounded-lg reveal border-l-2 border-l-primary">
+        <h3 class="font-headline-sm text-primary mb-4 flex items-center gap-2"><span class="material-symbols-outlined">code</span> Software Engineering</h3>
+        <ul class="font-body-md text-on-surface-variant space-y-2">
+          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#7b2ff7]"></span> Python &amp; Flask</li>
+          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#7b2ff7]"></span> REST APIs &amp; MySQL</li>
+          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#7b2ff7]"></span> Authentication &amp; Authorization</li>
+          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#7b2ff7]"></span> Web Scraping &amp; Automation</li>
+        </ul>
+      </div>
+      <div class="glass-card p-8 rounded-lg reveal border-l-2 border-l-primary">
+        <h3 class="font-headline-sm text-primary mb-4 flex items-center gap-2"><span class="material-symbols-outlined">smart_toy</span> AI &amp; Automation</h3>
+        <ul class="font-body-md text-on-surface-variant space-y-2">
+          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#7b2ff7]"></span> AI Tool Development</li>
+          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#7b2ff7]"></span> Gemini API Integration</li>
+          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#7b2ff7]"></span> Prompt Engineering</li>
+          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#7b2ff7]"></span> AI-Powered Business Systems</li>
+        </ul>
+      </div>
+      <div class="glass-card p-8 rounded-lg reveal border-l-2 border-l-primary">
+        <h3 class="font-headline-sm text-primary mb-4 flex items-center gap-2"><span class="material-symbols-outlined">health_and_safety</span> Healthcare Technology</h3>
+        <ul class="font-body-md text-on-surface-variant space-y-2">
+          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#7b2ff7]"></span> Hospital &amp; Clinic Management Systems</li>
+          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#7b2ff7]"></span> Patient Portals &amp; Engagement</li>
+          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#7b2ff7]"></span> Billing &amp; Appointment Scheduling</li>
+          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#7b2ff7]"></span> Healthcare Workflows</li>
+        </ul>
+      </div>
+      <div class="glass-card p-8 rounded-lg reveal border-l-2 border-l-primary">
+        <h3 class="font-headline-sm text-primary mb-4 flex items-center gap-2"><span class="material-symbols-outlined">engineering</span> Engineering &amp; Manufacturing</h3>
+        <ul class="font-body-md text-on-surface-variant space-y-2">
+          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#7b2ff7]"></span> Fusion 360 &amp; CAD/CAM</li>
+          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#7b2ff7]"></span> CNC Programming &amp; VMC Machining</li>
+          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#7b2ff7]"></span> 2D &amp; 3D Design</li>
+          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#7b2ff7]"></span> Manufacturing Workflow Automation</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section class="py-24 relative" id="contact">
+  <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+    <div class="flex items-center gap-4 mb-16 reveal">
+      <span class="font-code-sm text-secondary text-sm">04.</span>
+      <h2 class="font-headline-md text-headline-md uppercase tracking-wider">Get In Touch</h2>
+      <div class="h-px bg-outline-variant/30 flex-grow"></div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+      <div class="lg:col-span-5 reveal">
+        <p class="font-body-md text-body-lg text-on-surface-variant mb-8 leading-relaxed">
+          Currently exploring new opportunities. Whether you have a question, a project proposal, or just want to connect — my inbox is always open.
+        </p>
+        <a href="mailto:yashchaudhari5055@gmail.com" class="inline-flex items-center gap-3 font-code-sm text-primary hover:text-white transition-colors hover-target mb-4">
+          <span class="material-symbols-outlined">mail</span> yashchaudhari5055@gmail.com
+        </a>
+        <div class="mt-8 font-code-sm text-xs text-outline-variant">
+          <p>STATUS: <span class="text-[#28f280]">AVAILABLE FOR WORK</span></p>
+          <p class="mt-1">LOCATION: INDIA · REMOTE-FRIENDLY</p>
+        </div>
+      </div>
+      <div class="lg:col-span-7 reveal">
+        <!-- Netlify Forms: handled at deploy time on Netlify. -->
+        <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/?sent=1" class="glass-card p-8 rounded-lg space-y-5">
+          <input type="hidden" name="form-name" value="contact" />
+          <p class="hidden"><label>Don't fill this out: <input name="bot-field" /></label></p>
+          <div>
+            <label class="font-code-sm text-xs uppercase tracking-widest text-on-surface-variant block mb-2" for="name">Name</label>
+            <input id="name" name="name" type="text" required class="w-full bg-surface-container-lowest border border-outline-variant/50 rounded px-4 py-3 text-on-surface focus:border-primary focus:outline-none transition-colors" placeholder="Your name" />
+          </div>
+          <div>
+            <label class="font-code-sm text-xs uppercase tracking-widest text-on-surface-variant block mb-2" for="email">Email</label>
+            <input id="email" name="email" type="email" required class="w-full bg-surface-container-lowest border border-outline-variant/50 rounded px-4 py-3 text-on-surface focus:border-primary focus:outline-none transition-colors" placeholder="you@example.com" />
+          </div>
+          <div>
+            <label class="font-code-sm text-xs uppercase tracking-widest text-on-surface-variant block mb-2" for="message">Message</label>
+            <textarea id="message" name="message" rows="4" required class="w-full bg-surface-container-lowest border border-outline-variant/50 rounded px-4 py-3 text-on-surface focus:border-primary focus:outline-none transition-colors resize-none" placeholder="Tell me about your project…"></textarea>
+          </div>
+          <button type="submit" class="btn-primary px-8 py-3 font-code-sm text-sm uppercase tracking-wider hover-target inline-flex items-center gap-2 transition-transform hover:scale-105">
+            <span class="material-symbols-outlined text-[18px]">send</span> Send Message
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="border-t border-outline-variant/30 py-8 bg-surface-container-lowest/40">
+  <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-4">
+    <span class="font-code-sm text-xs text-outline-variant">© 2026 Yash Santosh Chaudhari · Built with precision.</span>
+    <span class="font-code-sm text-xs text-outline-variant">Healthcare SaaS · AI Tooling · CAD/CAM Automation</span>
+  </div>
+</footer>
+
+<style>@keyframes spin{to{transform:rotate(360deg)}}@keyframes bounce{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,-8px)}}</style>
+<script src="assets/js/vanilla-tilt.min.js" defer></script>
+<script src="assets/js/main.js" defer></script>
+</body>
+</html>

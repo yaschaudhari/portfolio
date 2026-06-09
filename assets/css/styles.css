@@ -1,0 +1,212 @@
+/* ============================================================
+   Yash Chaudhari — Portfolio
+   Custom styles beyond Tailwind utilities.
+   Aesthetic: Technical Minimalism + Cyber-Glassmorphism.
+   ============================================================ */
+
+:root {
+  --bg: #10141a;
+  --bg-deep: #0a0e14;
+  --primary: #00c6ff;
+  --primary-soft: #96dcff;
+  --secondary: #7b2ff7;
+  --on-surface: #dfe2eb;
+  --on-surface-variant: #bcc8d0;
+  --outline-variant: #3d484f;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: transparent;
+  color: var(--on-surface);
+  overflow-x: hidden;
+}
+
+/* Custom cursor — only on devices with a fine pointer (mouse) */
+#cursor-dot,
+#cursor-ring {
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width 0.2s, height 0.2s, background-color 0.2s, opacity 0.2s;
+  opacity: 0;
+}
+#cursor-dot {
+  width: 8px; height: 8px;
+  background-color: var(--primary);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--primary);
+}
+#cursor-ring {
+  width: 32px; height: 32px;
+  border: 1px solid rgba(0, 198, 255, 0.4);
+  border-radius: 50%;
+}
+@media (pointer: fine) {
+  body.has-custom-cursor { cursor: none; }
+  body.has-custom-cursor a,
+  body.has-custom-cursor button { cursor: none; }
+  #cursor-dot, #cursor-ring { opacity: 1; }
+}
+body.cursor-hover #cursor-ring {
+  width: 48px; height: 48px;
+  border-color: var(--primary);
+  background-color: rgba(0, 198, 255, 0.1);
+}
+
+/* Glassmorphism cards */
+.glass-card {
+  background: rgba(13, 17, 23, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+.glass-card:hover {
+  border-color: var(--primary);
+  box-shadow: 0 0 22px rgba(0, 198, 255, 0.18);
+}
+
+/* Buttons */
+.btn-primary {
+  background: var(--primary);
+  color: #05070f;
+  border-radius: 4px;
+  font-weight: 700;
+}
+.btn-primary:hover { box-shadow: 0 0 22px rgba(0, 198, 255, 0.45); }
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  border-radius: 4px;
+  transition: box-shadow 0.3s ease, text-shadow 0.3s ease, background-color 0.3s ease;
+}
+.btn-ghost:hover {
+  box-shadow: 0 0 15px rgba(0, 198, 255, 0.3);
+  text-shadow: 0 0 5px rgba(0, 198, 255, 0.5);
+  background-color: rgba(0, 198, 255, 0.05);
+}
+
+/* Typewriter cursor */
+.typewriter-cursor {
+  display: inline-block;
+  width: 10px;
+  height: 1.2em;
+  background-color: var(--primary);
+  vertical-align: middle;
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+.reveal.active { opacity: 1; transform: translateY(0); }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb { background: #1a212e; }
+::-webkit-scrollbar-thumb:hover { background: var(--outline-variant); }
+
+/* ---- Screenshot gallery (project pages) ---- */
+.shot {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 6px;
+  background: var(--bg-deep);
+  cursor: pointer;
+  transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+.shot img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.shot:hover {
+  border-color: var(--primary);
+  transform: translateY(-3px);
+  box-shadow: 0 0 22px rgba(0, 198, 255, 0.18);
+}
+.shot figcaption {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 0.75rem 0.85rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: var(--on-surface);
+  background: linear-gradient(to top, rgba(5, 7, 15, 0.95), rgba(5, 7, 15, 0));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.shot:hover figcaption { opacity: 1; }
+
+/* ---- Lightbox ---- */
+#lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(5, 7, 15, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 4vh 4vw;
+}
+#lightbox.open { display: flex; }
+#lightbox img {
+  max-width: 100%;
+  max-height: 82vh;
+  border: 1px solid var(--outline-variant);
+  border-radius: 6px;
+  box-shadow: 0 0 60px rgba(0, 198, 255, 0.15);
+}
+#lightbox .lb-caption {
+  position: absolute;
+  bottom: 3vh; left: 50%;
+  transform: translateX(-50%);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--on-surface-variant);
+  text-align: center;
+  max-width: 90vw;
+}
+#lightbox .lb-btn {
+  position: absolute;
+  background: transparent;
+  border: 1px solid var(--outline-variant);
+  color: var(--on-surface);
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.2s, color 0.2s, background-color 0.2s;
+}
+#lightbox .lb-btn:hover { border-color: var(--primary); color: var(--primary); background: rgba(0,198,255,0.08); }
+#lightbox .lb-close { top: 3vh; right: 4vw; }
+#lightbox .lb-prev { left: 2vw; top: 50%; transform: translateY(-50%); }
+#lightbox .lb-next { right: 2vw; top: 50%; transform: translateY(-50%); }
+.lb-counter {
+  position: absolute;
+  top: 3vh; left: 4vw;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--on-surface-variant);
+  letter-spacing: 0.1em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}

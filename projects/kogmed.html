@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html class="dark scroll-smooth" lang="en">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<title>Kogmed — Enterprise Healthcare Management Platform | Yash Chaudhari</title>
+<meta name="description" content="Kogmed — an enterprise healthcare management platform for multi-speciality hospitals and clinics. Multi-role RBAC, real-time slot booking, billing, payments, and security governance." />
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link href="https://fonts.googleapis.com" rel="preconnect" />
+<link crossorigin href="https://fonts.gstatic.com" rel="preconnect" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL@20..48,100..700,0..1&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="../assets/js/tailwind-config.js"></script>
+<link href="../assets/css/styles.css" rel="stylesheet" />
+<style>.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'opsz' 24}</style>
+</head>
+<body class="font-body-md text-on-surface antialiased">
+
+<div class="fixed inset-0 w-full h-full -z-10 bg-background">
+  <canvas id="shader-canvas" style="display:block;width:100%;height:100%"></canvas>
+</div>
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<!-- Nav -->
+<nav class="fixed top-0 w-full z-50 bg-background/60 backdrop-blur-xl border-b border-outline-variant/30 px-margin-mobile md:px-margin-desktop py-4">
+  <div class="max-w-container-max mx-auto flex justify-between items-center">
+    <a class="font-display-lg text-headline-sm font-bold text-primary tracking-tighter hover-target" href="../index.html">YC</a>
+    <a class="btn-ghost px-6 py-2 font-code-sm text-sm uppercase tracking-wider hover-target inline-flex items-center gap-2" href="../index.html#projects">
+      <span class="material-symbols-outlined text-[16px]">arrow_back</span> All Projects
+    </a>
+  </div>
+</nav>
+
+<!-- Header -->
+<section class="pt-36 pb-16 border-b border-outline-variant/30">
+  <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+    <div class="flex items-center gap-3 mb-6">
+      <span class="font-code-sm text-[10px] uppercase tracking-widest px-2 py-1 bg-primary/10 text-primary border border-primary/20 rounded">Healthcare</span>
+      <span class="font-code-sm text-[10px] uppercase tracking-widest px-2 py-1 bg-[#28f280]/10 text-[#28f280] border border-[#28f280]/20 rounded">Enterprise SaaS</span>
+    </div>
+    <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg mb-6">Kogmed</h1>
+    <p class="font-body-md text-body-lg text-on-surface-variant max-w-3xl leading-relaxed mb-8">
+      A comprehensive healthcare management ecosystem designed for multi-speciality hospitals, clinics, and healthcare organizations — spanning the full operational lifecycle from appointment booking to billing, prescriptions, and security governance.
+    </p>
+    <div class="flex flex-wrap gap-2">
+      <span class="font-code-sm text-xs px-3 py-1 bg-surface-variant rounded text-on-surface">PHP</span>
+      <span class="font-code-sm text-xs px-3 py-1 bg-surface-variant rounded text-on-surface">MySQL</span>
+      <span class="font-code-sm text-xs px-3 py-1 bg-surface-variant rounded text-on-surface">Bootstrap 5</span>
+      <span class="font-code-sm text-xs px-3 py-1 bg-surface-variant rounded text-on-surface">FullCalendar</span>
+      <span class="font-code-sm text-xs px-3 py-1 bg-surface-variant rounded text-on-surface">Chart.js</span>
+      <span class="font-code-sm text-xs px-3 py-1 bg-surface-variant rounded text-on-surface">Razorpay</span>
+    </div>
+  </div>
+</section>
+
+<!-- Highlights -->
+<section class="py-20 border-b border-outline-variant/30 bg-surface-container-lowest/30">
+  <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+    <div class="flex items-center gap-4 mb-12 reveal">
+      <span class="font-code-sm text-secondary text-sm">01.</span>
+      <h2 class="font-headline-md text-headline-md uppercase tracking-wider">Capabilities</h2>
+      <div class="h-px bg-outline-variant/30 flex-grow"></div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <div class="glass-card p-6 rounded-lg reveal"><span class="material-symbols-outlined text-primary mb-3">admin_panel_settings</span><h3 class="font-headline-sm text-lg mb-2">Multi-Role Architecture</h3><p class="text-sm text-on-surface-variant leading-relaxed">SuperAdmin, Admin, Manager, Reception, Doctor, and Patient — each with role-based access control and security governance.</p></div>
+      <div class="glass-card p-6 rounded-lg reveal"><span class="material-symbols-outlined text-primary mb-3">event_available</span><h3 class="font-headline-sm text-lg mb-2">Real-Time Slot Booking</h3><p class="text-sm text-on-surface-variant leading-relaxed">Multi-centre appointment management with concurrency protection so no slot is ever double-booked.</p></div>
+      <div class="glass-card p-6 rounded-lg reveal"><span class="material-symbols-outlined text-primary mb-3">stethoscope</span><h3 class="font-headline-sm text-lg mb-2">Clinical Workflows</h3><p class="text-sm text-on-surface-variant leading-relaxed">Doctor scheduling, consultation workflows, and full prescription lifecycle management.</p></div>
+      <div class="glass-card p-6 rounded-lg reveal"><span class="material-symbols-outlined text-primary mb-3">payments</span><h3 class="font-headline-sm text-lg mb-2">Billing &amp; Payments</h3><p class="text-sm text-on-surface-variant leading-relaxed">Billing, payments, refunds, and revenue tracking with Razorpay payment integration.</p></div>
+      <div class="glass-card p-6 rounded-lg reveal"><span class="material-symbols-outlined text-primary mb-3">family_restroom</span><h3 class="font-headline-sm text-lg mb-2">Patient Portal</h3><p class="text-sm text-on-surface-variant leading-relaxed">Family profile management, medical records, document management, and patient–doctor–reception messaging.</p></div>
+      <div class="glass-card p-6 rounded-lg reveal"><span class="material-symbols-outlined text-primary mb-3">security</span><h3 class="font-headline-sm text-lg mb-2">Security Hardening</h3><p class="text-sm text-on-surface-variant leading-relaxed">CSRF protection, rate limiting, lockout controls, secure sessions, plus analytics, audit logs, and exports.</p></div>
+    </div>
+    <div class="mt-10 flex flex-wrap gap-2 reveal">
+      <span class="font-code-sm text-[11px] uppercase tracking-widest text-outline-variant">Areas Covered:</span>
+      <span class="font-code-sm text-[11px] text-on-surface-variant">Healthcare Operations · Scheduling · Billing · Payments · Security · Patient Engagement · Analytics</span>
+    </div>
+  </div>
+</section>
+
+<!-- Gallery -->
+<section class="py-20">
+  <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+    <div class="flex items-center gap-4 mb-4 reveal">
+      <span class="font-code-sm text-secondary text-sm">02.</span>
+      <h2 class="font-headline-md text-headline-md uppercase tracking-wider">Product Tour</h2>
+      <div class="h-px bg-outline-variant/30 flex-grow"></div>
+    </div>
+    <p class="font-code-sm text-xs text-outline-variant mb-12 reveal">Click any screen to expand · use ← → to navigate</p>
+
+    <!-- Admin & Staff -->
+    <h3 class="font-code-sm text-sm uppercase tracking-widest text-primary mb-6 reveal">Admin &amp; Staff Console</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-16">
+      <a class="shot aspect-[16/10] reveal" data-lightbox href="../assets/img/kogmed/01-staff-login.png" data-caption="Secure staff sign-in with password & OTP options"><img loading="lazy" src="../assets/img/kogmed/01-staff-login.png" alt="Secure staff sign-in with password and OTP options" /><figcaption>Secure staff sign-in — password &amp; OTP</figcaption></a>
+      <a class="shot aspect-[16/10] reveal" data-lightbox href="../assets/img/kogmed/02-admin-dashboard.png" data-caption="Admin overview — patients, doctors, locations, live queue & alerts"><img loading="lazy" src="../assets/img/kogmed/02-admin-dashboard.png" alt="Admin dashboard overview" /><figcaption>Admin overview — live queue &amp; alerts</figcaption></a>
+      <a class="shot aspect-[16/10] reveal" data-lightbox href="../assets/img/kogmed/03-appointments-calendar.png" data-caption="Multi-doctor appointment calendar with colour-coded scheduling"><img loading="lazy" src="../assets/img/kogmed/03-appointments-calendar.png" alt="Multi-doctor appointment calendar" /><figcaption>Multi-doctor appointment calendar</figcaption></a>
+      <a class="shot aspect-[16/10] reveal" data-lightbox href="../assets/img/kogmed/04-doctor-management.png" data-caption="Doctor management — timings, colour codes, access mapping"><img loading="lazy" src="../assets/img/kogmed/04-doctor-management.png" alt="Doctor management" /><figcaption>Doctor management — timings &amp; access</figcaption></a>
+      <a class="shot aspect-[16/10] reveal" data-lightbox href="../assets/img/kogmed/05-clinical-canvas-prescription-pad.png" data-caption="Clinical Canvas — digital prescription pad with drawing tools & anatomy diagram layers"><img loading="lazy" src="../assets/img/kogmed/05-clinical-canvas-prescription-pad.png" alt="Clinical Canvas digital prescription pad" /><figcaption>Clinical Canvas — digital prescription pad</figcaption></a>
+      <a class="shot aspect-[16/10] reveal" data-lightbox href="../assets/img/kogmed/06-chat-support-console.png" data-caption="Real-time patient support chat with session routing & transfer"><img loading="lazy" src="../assets/img/kogmed/06-chat-support-console.png" alt="Chat support console" /><figcaption>Real-time support chat &amp; routing</figcaption></a>
+      <a class="shot aspect-[16/10] reveal" data-lightbox href="../assets/img/kogmed/07-doctor-dashboard.png" data-caption="Doctor workspace — availability toggles, today's queue & quick actions"><img loading="lazy" src="../assets/img/kogmed/07-doctor-dashboard.png" alt="Doctor dashboard" /><figcaption>Doctor workspace — queue &amp; quick actions</figcaption></a>
+      <a class="shot aspect-[16/10] reveal" data-lightbox href="../assets/img/kogmed/08-revenue-report.png" data-caption="Revenue reporting — KPIs, revenue trend & payment-mode breakdown"><img loading="lazy" src="../assets/img/kogmed/08-revenue-report.png" alt="Revenue report" /><figcaption>Revenue reporting — KPIs &amp; trends</figcaption></a>
+      <a class="shot aspect-[16/10] reveal" data-lightbox href="../assets/img/kogmed/09-audit-log.png" data-caption="Security audit log — full activity trail by user, action & IP"><img loading="lazy" src="../assets/img/kogmed/09-audit-log.png" alt="Security audit log" /><figcaption>Security audit log — full activity trail</figcaption></a>
+    </div>
+
+    <!-- Patient web -->
+    <h3 class="font-code-sm text-sm uppercase tracking-widest text-primary mb-6 reveal">Patient Portal (Web)</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-16">
+      <a class="shot aspect-[16/10] reveal" data-lightbox href="../assets/img/kogmed/10-patient-portal-login.png" data-caption="Patient portal login with health-tips feed"><img loading="lazy" src="../assets/img/kogmed/10-patient-portal-login.png" alt="Patient portal login" /><figcaption>Patient portal login — health-tips feed</figcaption></a>
+      <a class="shot aspect-[16/10] reveal" data-lightbox href="../assets/img/kogmed/11-patient-dashboard-desktop.png" data-caption="Patient home — quick actions & wellness hub (desktop)"><img loading="lazy" src="../assets/img/kogmed/11-patient-dashboard-desktop.png" alt="Patient dashboard desktop" /><figcaption>Patient home — quick actions &amp; wellness hub</figcaption></a>
+    </div>
+
+    <!-- Patient mobile -->
+    <h3 class="font-code-sm text-sm uppercase tracking-widest text-primary mb-6 reveal">Patient App (Mobile)</h3>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-5">
+      <a class="shot aspect-[9/19] reveal" data-lightbox href="../assets/img/kogmed/12-patient-home-mobile.png" data-caption="Mobile patient home — app-style quick actions & wellness hub"><img loading="lazy" src="../assets/img/kogmed/12-patient-home-mobile.png" alt="Mobile patient home" /><figcaption>Mobile home</figcaption></a>
+      <a class="shot aspect-[9/19] reveal" data-lightbox href="../assets/img/kogmed/13-book-appointment-select-doctor.png" data-caption="Booking flow — choose doctor by specialty"><img loading="lazy" src="../assets/img/kogmed/13-book-appointment-select-doctor.png" alt="Booking — select doctor" /><figcaption>Select doctor</figcaption></a>
+      <a class="shot aspect-[9/19] reveal" data-lightbox href="../assets/img/kogmed/14-book-appointment-time-slots.png" data-caption="Booking flow — live slot availability by session"><img loading="lazy" src="../assets/img/kogmed/14-book-appointment-time-slots.png" alt="Booking — time slots" /><figcaption>Live slots</figcaption></a>
+      <a class="shot aspect-[9/19] reveal" data-lightbox href="../assets/img/kogmed/15-digital-prescription.png" data-caption="Digital prescription — structured medicines, dosing & advice"><img loading="lazy" src="../assets/img/kogmed/15-digital-prescription.png" alt="Digital prescription" /><figcaption>Prescription</figcaption></a>
+      <a class="shot aspect-[9/19] reveal" data-lightbox href="../assets/img/kogmed/16-appointment-history.png" data-caption="Appointment history with status tracking"><img loading="lazy" src="../assets/img/kogmed/16-appointment-history.png" alt="Appointment history" /><figcaption>History</figcaption></a>
+      <a class="shot aspect-[9/19] reveal" data-lightbox href="../assets/img/kogmed/17-patient-messaging.png" data-caption="In-app messaging with reception & doctors"><img loading="lazy" src="../assets/img/kogmed/17-patient-messaging.png" alt="Patient messaging" /><figcaption>Messaging</figcaption></a>
+    </div>
+
+    <div class="mt-20 text-center reveal">
+      <a class="btn-ghost px-8 py-3 font-code-sm text-sm uppercase tracking-wider hover-target inline-flex items-center gap-2" href="../index.html#projects">
+        <span class="material-symbols-outlined text-[18px]">arrow_back</span> Back to all projects
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div id="lightbox" aria-hidden="true">
+  <span class="lb-counter" id="lb-counter"></span>
+  <button class="lb-btn lb-close" aria-label="Close"><span class="material-symbols-outlined">close</span></button>
+  <button class="lb-btn lb-prev" aria-label="Previous"><span class="material-symbols-outlined">chevron_left</span></button>
+  <button class="lb-btn lb-next" aria-label="Next"><span class="material-symbols-outlined">chevron_right</span></button>
+  <img id="lb-img" src="" alt="" />
+  <div class="lb-caption" id="lb-caption"></div>
+</div>
+
+<footer class="border-t border-outline-variant/30 py-8 bg-surface-container-lowest/40">
+  <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-4">
+    <span class="font-code-sm text-xs text-outline-variant">© 2026 Yash Santosh Chaudhari</span>
+    <a href="../index.html#contact" class="font-code-sm text-xs text-primary hover:text-white transition-colors hover-target">Get in touch →</a>
+  </div>
+</footer>
+
+<script src="../assets/js/main.js" defer></script>
+</body>
+</html>

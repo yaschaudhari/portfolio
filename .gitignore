@@ -2,3 +2,7 @@
 node_modules/
 *.log
 .claude/
+
+# Local verification artifacts (Playwright screenshots, etc.)
+.playwright-mcp/
+portfolio-*.png
