@@ -216,8 +216,37 @@ function boot(canvas) {
     pointer.tx = (e.clientX / window.innerWidth - 0.5);
     pointer.ty = (e.clientY / window.innerHeight - 0.5);
   });
-  const state = { scroll: 0 };
-  window.__cinematic = { setScroll(p) { state.scroll = p; } };
+  const state = { scroll: 0, sm: 0 };
+  window.__cinematic = {
+    setScroll(p) { state.scroll = p; },
+    debug() { return { camZ: +camera.position.z.toFixed(2), camY: +camera.position.y.toFixed(2), sm: +state.sm.toFixed(3), scroll: +state.scroll.toFixed(3) }; }
+  };
+
+  /* ---------- Scroll-driven camera flythrough ("video on scroll") ----------
+     Keyframes interpolated by page-scroll progress (0..1). As you scroll the
+     camera flies forward, banks past the crystal and figure, then rises into
+     the sky — so scrolling feels like scrubbing a film. */
+  const PATH = [
+    { s: 0.00, pos: [0,  2.4,  16], look: [0, 3.2,  -60] },
+    { s: 0.26, pos: [0,  3.2,  -1], look: [0, 3.6,  -55] },
+    { s: 0.50, pos: [3.5, 5.0, -20], look: [0, 4.2,  -60] },
+    { s: 0.74, pos: [-3.5, 6.6, -42], look: [0, 4.6,  -82] },
+    { s: 1.00, pos: [0,  9.5, -66], look: [0, 6.4, -112] }
+  ];
+  const _p = new THREE.Vector3();
+  const _l = new THREE.Vector3();
+  function samplePath(s) {
+    let a = PATH[0], b = PATH[PATH.length - 1];
+    for (let i = 0; i < PATH.length - 1; i++) {
+      if (s >= PATH[i].s && s <= PATH[i + 1].s) { a = PATH[i]; b = PATH[i + 1]; break; }
+    }
+    const t = a.s === b.s ? 0 : (s - a.s) / (b.s - a.s);
+    const te = t * t * (3 - 2 * t); // smoothstep easing
+    _p.set(a.pos[0] + (b.pos[0]-a.pos[0])*te, a.pos[1] + (b.pos[1]-a.pos[1])*te, a.pos[2] + (b.pos[2]-a.pos[2])*te);
+    _l.set(a.look[0] + (b.look[0]-a.look[0])*te, a.look[1] + (b.look[1]-a.look[1])*te, a.look[2] + (b.look[2]-a.look[2])*te);
+  }
+  const lookTarget = new THREE.Vector3(0, 3.2, -60);
+  camera.position.set(0, 2.4, 16);
 
   function onResize() {
     const w = window.innerWidth, h = window.innerHeight;
@@ -239,12 +268,22 @@ function boot(canvas) {
     crystal.rotation.y += dt * 0.18;
     crystal.rotation.x = Math.sin(uTime.value * 0.2) * 0.12;
     crystal.position.y = 4.2 + Math.sin(uTime.value * 0.5) * 0.25;
+    crystal.scale.setScalar(1.3 + state.sm * 0.6);
+
+    // smooth the scroll value, then fly the camera along the keyframe path
+    state.sm += (state.scroll - state.sm) * 0.07;
+    samplePath(state.sm);
 
     pointer.x += (pointer.tx - pointer.x) * 0.04;
     pointer.y += (pointer.ty - pointer.y) * 0.04;
-    camera.position.x = pointer.x * 2.4;
-    camera.position.y = 2.4 - pointer.y * 1.0 + state.scroll * 1.5;
-    camera.lookAt(0, 3.2, -60);
+    camera.position.x += ((_p.x + pointer.x * 2.2) - camera.position.x) * 0.08;
+    camera.position.y += ((_p.y - pointer.y * 0.9) - camera.position.y) * 0.08;
+    camera.position.z += (_p.z - camera.position.z) * 0.08;
+    lookTarget.lerp(_l, 0.08);
+    camera.lookAt(lookTarget);
+
+    // world clears as we rise into the sky toward the end
+    scene.fog.density = 0.05 - state.sm * 0.028;
 
     composer.render();
   }

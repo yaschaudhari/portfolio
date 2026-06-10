@@ -212,16 +212,43 @@
     setTimeout(hide, reduceMotion ? 200 : 1800);
   })();
 
+  /* ---------- Lenis smooth scroll (filmic feel) ---------- */
+  var lenis = null;
+  if (window.Lenis && !reduceMotion) {
+    lenis = new window.Lenis({ lerp: 0.085, wheelMultiplier: 1.0, smoothWheel: true, smoothTouch: false });
+    var rafLoop = function (time) { lenis.raf(time); requestAnimationFrame(rafLoop); };
+    requestAnimationFrame(rafLoop);
+    document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+      a.addEventListener("click", function (e) {
+        var id = a.getAttribute("href");
+        if (id && id.length > 1) {
+          var el = document.querySelector(id);
+          if (el) { e.preventDefault(); lenis.scrollTo(el, { offset: -40 }); }
+        }
+      });
+    });
+  }
+
   /* ---------- Scroll progress rail + cinematic scroll hook ---------- */
   (function scrollProgress() {
     var fill = document.getElementById("progress-fill");
     function update() {
       var max = document.documentElement.scrollHeight - window.innerHeight;
       var p = max > 0 ? window.scrollY / max : 0;
+      p = Math.min(Math.max(p, 0), 1);
       if (fill) fill.style.height = (p * 100).toFixed(2) + "%";
       if (window.__cinematic) window.__cinematic.setScroll(p);
     }
-    window.addEventListener("scroll", update, { passive: true });
+    if (lenis) {
+      lenis.on("scroll", function (e) {
+        var max = (e.limit || (document.documentElement.scrollHeight - window.innerHeight)) || 1;
+        var p = Math.min(Math.max((e.scroll || 0) / max, 0), 1);
+        if (fill) fill.style.height = (p * 100).toFixed(2) + "%";
+        if (window.__cinematic) window.__cinematic.setScroll(p);
+      });
+    } else {
+      window.addEventListener("scroll", update, { passive: true });
+    }
     update();
   })();
 
