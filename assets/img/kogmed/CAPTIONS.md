@@ -13,7 +13,6 @@ Patient portal**. Captured at full resolution (desktop 1440×900, mobile 390×84
 | `02-admin-dashboard.png` | Admin overview — patients, doctors, locations, live queue & alerts |
 | `03-appointments-calendar.png` | Multi-doctor appointment calendar with colour-coded scheduling |
 | `04-doctor-management.png` | Doctor management — timings, colour codes, access mapping |
-| `05-clinical-canvas-prescription-pad.png` | Clinical Canvas — digital prescription pad with drawing tools & anatomy diagram layers |
 | `06-chat-support-console.png` | Real-time patient support chat with session routing & transfer |
 | `07-doctor-dashboard.png` | Doctor workspace — availability toggles, today's queue & quick actions |
 | `08-revenue-report.png` | Revenue reporting — KPIs, revenue trend & payment-mode breakdown |
