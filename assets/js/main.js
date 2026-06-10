@@ -215,7 +215,14 @@
   /* ---------- Lenis smooth scroll (filmic feel) ---------- */
   var lenis = null;
   if (window.Lenis && !reduceMotion) {
-    lenis = new window.Lenis({ lerp: 0.085, wheelMultiplier: 1.0, smoothWheel: true, smoothTouch: false });
+    lenis = new window.Lenis({
+      lerp: 0.14,             // snappier settle (was 0.085 = sluggish)
+      wheelMultiplier: 1.35,  // each wheel notch travels further
+      touchMultiplier: 1.4,
+      smoothWheel: true,
+      smoothTouch: false,
+      syncTouch: false
+    });
     var rafLoop = function (time) { lenis.raf(time); requestAnimationFrame(rafLoop); };
     requestAnimationFrame(rafLoop);
     document.querySelectorAll('a[href^="#"]').forEach(function (a) {
@@ -239,17 +246,29 @@
       if (fill) fill.style.height = (p * 100).toFixed(2) + "%";
       if (window.__cinematic) window.__cinematic.setScroll(p);
     }
+    // Map the cinematic flythrough to the first ~2 viewports so every scroll
+    // inch translates into visible camera movement (avoids the "empty motion"
+    // feeling when the page is much taller than the flight needs).
+    function flightProgress(scrollY) {
+      var flightSpan = Math.max(window.innerHeight * 1.8, 800);
+      return Math.min(Math.max(scrollY / flightSpan, 0), 1);
+    }
+    function emit(scrollY, max) {
+      var p = max > 0 ? Math.min(Math.max(scrollY / max, 0), 1) : 0;
+      if (fill) fill.style.height = (p * 100).toFixed(2) + "%";
+      if (window.__cinematic) window.__cinematic.setScroll(flightProgress(scrollY));
+    }
     if (lenis) {
       lenis.on("scroll", function (e) {
         var max = (e.limit || (document.documentElement.scrollHeight - window.innerHeight)) || 1;
-        var p = Math.min(Math.max((e.scroll || 0) / max, 0), 1);
-        if (fill) fill.style.height = (p * 100).toFixed(2) + "%";
-        if (window.__cinematic) window.__cinematic.setScroll(p);
+        emit(e.scroll || 0, max);
       });
     } else {
-      window.addEventListener("scroll", update, { passive: true });
+      window.addEventListener("scroll", function () {
+        emit(window.scrollY, document.documentElement.scrollHeight - window.innerHeight);
+      }, { passive: true });
     }
-    update();
+    emit(window.scrollY || 0, document.documentElement.scrollHeight - window.innerHeight);
   })();
 
   /* ---------- Mobile nav toggle ---------- */
