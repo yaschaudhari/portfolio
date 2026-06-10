@@ -102,32 +102,36 @@
     render(0);
   })();
 
-  /* ---------- Custom cursor ---------- */
-  (function customCursor() {
-    var dot = document.getElementById("cursor-dot");
-    var ring = document.getElementById("cursor-ring");
-    if (!dot || !ring) return;
+  /* ---------- Developer cursor (terminal block + IDE brackets) ---------- */
+  (function devCursor() {
+    var el = document.getElementById("dev-cursor");
+    if (!el) return;
     if (!window.matchMedia("(pointer: fine)").matches) return;
+    if (reduceMotion) return;
 
-    document.body.classList.add("has-custom-cursor");
-    var rx = 0, ry = 0, mx = 0, my = 0;
+    document.body.classList.add("has-dev-cursor");
+    var x = innerWidth / 2, y = innerHeight / 2;     // smoothed position
+    var tx = x, ty = y;                              // target (mouse)
 
-    window.addEventListener("mousemove", function (e) {
-      mx = e.clientX; my = e.clientY;
-      dot.style.left = mx + "px";
-      dot.style.top = my + "px";
-    });
-    (function follow() {
-      rx += (mx - rx) * 0.18;
-      ry += (my - ry) * 0.18;
-      ring.style.left = rx + "px";
-      ring.style.top = ry + "px";
-      requestAnimationFrame(follow);
+    window.addEventListener("mousemove", function (e) { tx = e.clientX; ty = e.clientY; });
+    document.addEventListener("mouseleave", function () { el.style.opacity = "0"; });
+    document.addEventListener("mouseenter", function () { el.style.opacity = "0.95"; });
+
+    (function tick() {
+      // light lerp so the cursor feels alive without floating away from the click point
+      x += (tx - x) * 0.35;
+      y += (ty - y) * 0.35;
+      el.style.transform = "translate(" + x + "px, " + y + "px) translate(-50%, -50%)";
+      requestAnimationFrame(tick);
     })();
 
-    document.querySelectorAll('a, button, .hover-target, .shot').forEach(function (el) {
-      el.addEventListener("mouseenter", function () { document.body.classList.add("cursor-hover"); });
-      el.addEventListener("mouseleave", function () { document.body.classList.remove("cursor-hover"); });
+    // brackets appear over anything clickable / focusable
+    var INTERACTIVE = 'a, button, input, textarea, select, [role="button"], .shot';
+    function activate() { document.body.classList.add("dev-cursor-active"); }
+    function deactivate() { document.body.classList.remove("dev-cursor-active"); }
+    document.querySelectorAll(INTERACTIVE).forEach(function (n) {
+      n.addEventListener("mouseenter", activate);
+      n.addEventListener("mouseleave", deactivate);
     });
   })();
 

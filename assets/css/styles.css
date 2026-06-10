@@ -87,38 +87,59 @@ a.btn-clean--primary:hover, button.btn-clean--primary:hover {
   transform: translateY(-2px);
 }
 
-/* Custom cursor — only on devices with a fine pointer (mouse) */
-#cursor-dot,
-#cursor-ring {
+/* ---- Developer cursor (terminal block + IDE brackets) ----
+   Mouse-only (pointer:fine); hidden on touch devices and reduced-motion */
+#dev-cursor {
   position: fixed;
   top: 0; left: 0;
-  pointer-events: none;
   z-index: 9999;
+  pointer-events: none;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  display: none;                 /* shown only on fine pointer */
+  align-items: center;
+  gap: 4px;
   transform: translate(-50%, -50%);
-  transition: width 0.2s, height 0.2s, background-color 0.2s, opacity 0.2s;
-  opacity: 0;
-}
-#cursor-dot {
-  width: 8px; height: 8px;
-  background-color: var(--primary);
-  border-radius: 50%;
-  box-shadow: 0 0 10px var(--primary);
-}
-#cursor-ring {
-  width: 32px; height: 32px;
-  border: 1px solid rgba(0, 198, 255, 0.4);
-  border-radius: 50%;
+  will-change: transform;
+  font-size: 14px;
+  color: #fff;
+  opacity: 0.95;
 }
 @media (pointer: fine) {
-  body.has-custom-cursor { cursor: none; }
-  body.has-custom-cursor a,
-  body.has-custom-cursor button { cursor: none; }
-  #cursor-dot, #cursor-ring { opacity: 1; }
+  #dev-cursor { display: inline-flex; }
+  body.has-dev-cursor,
+  body.has-dev-cursor a,
+  body.has-dev-cursor button,
+  body.has-dev-cursor input,
+  body.has-dev-cursor textarea,
+  body.has-dev-cursor [role="button"] { cursor: none; }
 }
-body.cursor-hover #cursor-ring {
-  width: 48px; height: 48px;
-  border-color: var(--primary);
-  background-color: rgba(0, 198, 255, 0.1);
+@media (prefers-reduced-motion: reduce) {
+  #dev-cursor { display: none !important; }
+}
+.dev-cursor__block {
+  width: 9px;
+  height: 16px;
+  background: #fff;
+  display: inline-block;
+  animation: devCursorBlink 1.1s steps(1, end) infinite;
+}
+.dev-cursor__bracket {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1;
+  color: #fff;
+  opacity: 0;                    /* revealed only over interactive targets */
+  transition: opacity 140ms ease, transform 140ms ease;
+}
+.dev-cursor__bracket--l { transform: translateX(4px); }
+.dev-cursor__bracket--r { transform: translateX(-4px); }
+body.dev-cursor-active .dev-cursor__bracket { opacity: 1; }
+body.dev-cursor-active .dev-cursor__bracket--l { transform: translateX(0); }
+body.dev-cursor-active .dev-cursor__bracket--r { transform: translateX(0); }
+body.dev-cursor-active .dev-cursor__block { animation: none; opacity: 0.85; }
+@keyframes devCursorBlink {
+  0%, 55% { opacity: 1; }
+  60%, 100% { opacity: 0; }
 }
 
 /* Glassmorphism cards */
