@@ -3,6 +3,26 @@ node_modules/
 *.log
 .claude/
 
-# Local verification artifacts (Playwright screenshots, etc.)
+# Local verification artifacts (Playwright screenshots, scratch images, etc.)
 .playwright-mcp/
+sidewave-*.png
+fly-*.png
+cinematic-*.png
+clean-*.png
+clean-*.html
+dusk-*.png
 portfolio-*.png
+final-*.png
+dev-cursor-*.png
+hero-*.png
+preview-*.png
+audit-*.png
+
+# Stitch source export (kept out of the deployed site)
+DESIGN.md
+code.html
+screen.png
+
+# OS / editor
+.vscode/
+.idea/
