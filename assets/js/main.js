@@ -216,9 +216,10 @@
   var lenis = null;
   if (window.Lenis && !reduceMotion) {
     lenis = new window.Lenis({
-      lerp: 0.14,             // snappier settle (was 0.085 = sluggish)
-      wheelMultiplier: 1.35,  // each wheel notch travels further
-      touchMultiplier: 1.4,
+      lerp: 0.16,             // snappy settle
+      duration: 0.9,          // shorter glide (default ~1.2s felt long)
+      wheelMultiplier: 3.5,   // ~2 wheel notches per viewport (was ~6)
+      touchMultiplier: 2.4,
       smoothWheel: true,
       smoothTouch: false,
       syncTouch: false
