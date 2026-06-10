@@ -26,3 +26,6 @@ screen.png
 # OS / editor
 .vscode/
 .idea/
+
+# Local Netlify folder
+.netlify
