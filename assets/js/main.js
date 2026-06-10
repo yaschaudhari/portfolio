@@ -212,65 +212,7 @@
     setTimeout(hide, reduceMotion ? 200 : 1800);
   })();
 
-  /* ---------- Lenis smooth scroll (filmic feel) ---------- */
-  var lenis = null;
-  if (window.Lenis && !reduceMotion) {
-    lenis = new window.Lenis({
-      lerp: 0.16,             // snappy settle
-      duration: 0.9,          // shorter glide (default ~1.2s felt long)
-      wheelMultiplier: 3.5,   // ~2 wheel notches per viewport (was ~6)
-      touchMultiplier: 2.4,
-      smoothWheel: true,
-      smoothTouch: false,
-      syncTouch: false
-    });
-    var rafLoop = function (time) { lenis.raf(time); requestAnimationFrame(rafLoop); };
-    requestAnimationFrame(rafLoop);
-    document.querySelectorAll('a[href^="#"]').forEach(function (a) {
-      a.addEventListener("click", function (e) {
-        var id = a.getAttribute("href");
-        if (id && id.length > 1) {
-          var el = document.querySelector(id);
-          if (el) { e.preventDefault(); lenis.scrollTo(el, { offset: -40 }); }
-        }
-      });
-    });
-  }
-
-  /* ---------- Scroll progress rail + cinematic scroll hook ---------- */
-  (function scrollProgress() {
-    var fill = document.getElementById("progress-fill");
-    function update() {
-      var max = document.documentElement.scrollHeight - window.innerHeight;
-      var p = max > 0 ? window.scrollY / max : 0;
-      p = Math.min(Math.max(p, 0), 1);
-      if (fill) fill.style.height = (p * 100).toFixed(2) + "%";
-      if (window.__cinematic) window.__cinematic.setScroll(p);
-    }
-    // Map the cinematic flythrough to the first ~2 viewports so every scroll
-    // inch translates into visible camera movement (avoids the "empty motion"
-    // feeling when the page is much taller than the flight needs).
-    function flightProgress(scrollY) {
-      var flightSpan = Math.max(window.innerHeight * 1.8, 800);
-      return Math.min(Math.max(scrollY / flightSpan, 0), 1);
-    }
-    function emit(scrollY, max) {
-      var p = max > 0 ? Math.min(Math.max(scrollY / max, 0), 1) : 0;
-      if (fill) fill.style.height = (p * 100).toFixed(2) + "%";
-      if (window.__cinematic) window.__cinematic.setScroll(flightProgress(scrollY));
-    }
-    if (lenis) {
-      lenis.on("scroll", function (e) {
-        var max = (e.limit || (document.documentElement.scrollHeight - window.innerHeight)) || 1;
-        emit(e.scroll || 0, max);
-      });
-    } else {
-      window.addEventListener("scroll", function () {
-        emit(window.scrollY, document.documentElement.scrollHeight - window.innerHeight);
-      }, { passive: true });
-    }
-    emit(window.scrollY || 0, document.documentElement.scrollHeight - window.innerHeight);
-  })();
+  /* Native browser scrolling — no smooth-scroll library. */
 
   /* ---------- Mobile nav toggle ---------- */
   (function mobileNav() {

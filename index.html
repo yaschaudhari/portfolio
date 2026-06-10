@@ -20,20 +20,14 @@
 <!-- Tailwind (Play CDN — compiled to static CSS before launch) -->
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script src="assets/js/tailwind-config.js"></script>
-<link href="assets/css/styles.css" rel="stylesheet" />
+<link href="assets/css/styles.css?v=clean1" rel="stylesheet" />
 <style>.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'opsz' 24}</style>
 </head>
 <body class="font-body-md text-on-surface antialiased">
 
-<!-- Cinematic 3D world (Milestone 1) -->
-<canvas id="cinematic-canvas"></canvas>
-<div class="cinematic-fallback" aria-hidden="true"></div>
-<div class="cinematic-grain" aria-hidden="true"></div>
-<div class="progress-rail" aria-hidden="true"><span id="progress-fill"></span></div>
+<!-- Subtle ambient backdrop (static, professional) -->
+<div class="ambient-backdrop" aria-hidden="true"></div>
 
-<!-- Custom cursor -->
-<div id="cursor-dot"></div>
-<div id="cursor-ring"></div>
 
 <!-- Loader -->
 <div class="fixed inset-0 z-[100] bg-black flex items-center justify-center transition-opacity duration-500" id="loader">
@@ -68,45 +62,29 @@
   </div>
 </nav>
 
-<!-- Hero — cinematic HUD overlay -->
-<section id="top" class="relative min-h-screen overflow-hidden">
-  <!-- Mission panel (upper-left) -->
-  <div class="hud-panel absolute top-28 left-margin-mobile md:left-margin-desktop max-w-xs reveal-now">
-    <div class="hud-panel-label">[ MISSION ]</div>
-    <p class="font-code-sm text-xs text-on-surface-variant leading-relaxed mt-2 uppercase tracking-wider">
-      Building healthcare platforms, AI systems &amp; engineering automation — beyond the ordinary.
-    </p>
-  </div>
-
-  <!-- Central statement -->
-  <div class="absolute inset-0 flex flex-col justify-center px-margin-mobile md:px-margin-desktop">
-    <div class="max-w-container-max mx-auto w-full">
-      <div class="hud-eyebrow reveal-now">
-        <span class="w-1.5 h-1.5 rounded-full bg-[#ff5db3] animate-pulse"></span>
-        PORTFOLIO // 2026 — AVAILABLE FOR WORK
-      </div>
-      <h1 class="hero-name reveal-now">Yash Santosh<br/>Chaudhari</h1>
-      <p class="font-code-sm text-body-lg text-on-surface-variant flex items-center mt-6 reveal-now">
-        <span class="text-[#ff5db3] mr-2">&#9656;</span>
-        <span id="typewriter-text" data-phrases="Healthcare SaaS Developer|AI Tooling Builder|CAD/CAM Automation Engineer"></span><span class="typewriter-cursor"></span>
-      </p>
+<!-- Hero — clean, professional -->
+<section id="top" class="relative min-h-screen flex items-center pt-32 pb-20">
+  <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop w-full">
+    <div class="font-code-sm text-xs tracking-[0.25em] uppercase text-on-surface-variant mb-6 flex items-center gap-3">
+      <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+      Available for work — 2026
     </div>
-  </div>
-
-  <!-- Scroll cue (bottom-centre) -->
-  <a href="#about" class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-on-surface-variant hover:text-white transition-colors hover-target">
-    <span class="font-label-caps text-label-caps tracking-[0.25em]">SCROLL TO DISCOVER</span>
-    <span class="scroll-rail"><span class="scroll-rail-dot"></span></span>
-  </a>
-
-  <!-- Corner index (bottom-left) -->
-  <div class="absolute bottom-8 left-margin-mobile md:left-margin-desktop hidden md:block font-code-sm text-[10px] text-outline-variant tracking-widest uppercase">
-    01 — Origin<br/>Healthcare · AI · Manufacturing
+    <h1 class="hero-name">Yash Santosh<br/>Chaudhari</h1>
+    <p class="mt-6 max-w-2xl text-base md:text-lg text-on-surface-variant leading-relaxed">
+      Software developer building scalable healthcare platforms, AI-powered business systems, and engineering automation that solves real-world operational challenges.
+    </p>
+    <p class="mt-2 max-w-2xl text-sm text-on-surface-variant/70 font-code-sm">
+      <span id="typewriter-text" data-phrases="Healthcare SaaS · AI Tooling · CAD/CAM Automation"></span><span class="typewriter-cursor"></span>
+    </p>
+    <div class="mt-10 flex flex-wrap gap-3">
+      <a href="#projects" class="btn-clean btn-clean--primary">View projects</a>
+      <a href="#contact" class="btn-clean">Get in touch</a>
+    </div>
   </div>
 </section>
 
 <!-- About -->
-<section class="py-20 border-b border-outline-variant/20 bg-surface-container-lowest/40 backdrop-blur-sm relative" id="about">
+<section class="py-20 border-b border-outline-variant/10 relative" id="about">
   <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
     <div class="flex items-center gap-4 mb-16 reveal">
       <span class="font-code-sm text-secondary text-sm">01.</span>
@@ -147,7 +125,7 @@
 </section>
 
 <!-- Projects -->
-<section class="py-20 border-b border-outline-variant/30 bg-background/80 backdrop-blur-md relative" id="projects">
+<section class="py-20 border-b border-outline-variant/10 relative" id="projects">
   <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
     <div class="flex items-center gap-4 mb-16 reveal">
       <span class="font-code-sm text-secondary text-sm">02.</span>
@@ -229,7 +207,7 @@
 </section>
 
 <!-- Skills -->
-<section class="py-20 border-b border-outline-variant/30 bg-surface-container-lowest/80 backdrop-blur-md relative overflow-hidden" id="skills">
+<section class="py-20 border-b border-outline-variant/10 relative overflow-hidden" id="skills">
   <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop mb-8">
     <div class="flex items-center gap-4 reveal">
       <span class="font-code-sm text-secondary text-sm">03.</span>
@@ -238,7 +216,7 @@
     </div>
   </div>
 
-  <div class="w-full overflow-hidden bg-primary/5 py-3 border-y border-primary/20 mb-8 reveal flex whitespace-nowrap group">
+  <div class="w-full overflow-hidden py-3 border-y border-outline-variant/15 mb-8 reveal flex whitespace-nowrap group hidden md:flex">
     <div class="animate-marquee group-hover:[animation-play-state:paused] flex gap-12 font-display-lg text-4xl text-on-surface opacity-50 uppercase tracking-wider font-bold pl-12">
       <span>Python</span><span class="text-primary">•</span>
       <span>Flask</span><span class="text-primary">•</span>
@@ -266,7 +244,7 @@
 
   <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="glass-card p-6 rounded-lg reveal border-l-2 border-l-primary">
+      <div class="card-clean p-6 reveal">
         <h3 class="font-headline-sm text-primary mb-4 flex items-center gap-2"><span class="material-symbols-outlined">code</span> Software Engineering</h3>
         <ul class="font-body-md text-on-surface-variant space-y-2">
           <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#7b2ff7]"></span> Python &amp; Flask</li>
@@ -275,7 +253,7 @@
           <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#7b2ff7]"></span> Web Scraping &amp; Automation</li>
         </ul>
       </div>
-      <div class="glass-card p-6 rounded-lg reveal border-l-2 border-l-primary">
+      <div class="card-clean p-6 reveal">
         <h3 class="font-headline-sm text-primary mb-4 flex items-center gap-2"><span class="material-symbols-outlined">smart_toy</span> AI &amp; Automation</h3>
         <ul class="font-body-md text-on-surface-variant space-y-2">
           <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#7b2ff7]"></span> AI Tool Development</li>
@@ -284,7 +262,7 @@
           <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#7b2ff7]"></span> AI-Powered Business Systems</li>
         </ul>
       </div>
-      <div class="glass-card p-6 rounded-lg reveal border-l-2 border-l-primary">
+      <div class="card-clean p-6 reveal">
         <h3 class="font-headline-sm text-primary mb-4 flex items-center gap-2"><span class="material-symbols-outlined">health_and_safety</span> Healthcare Technology</h3>
         <ul class="font-body-md text-on-surface-variant space-y-2">
           <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#7b2ff7]"></span> Hospital &amp; Clinic Management Systems</li>
@@ -293,7 +271,7 @@
           <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#7b2ff7]"></span> Healthcare Workflows</li>
         </ul>
       </div>
-      <div class="glass-card p-6 rounded-lg reveal border-l-2 border-l-primary">
+      <div class="card-clean p-6 reveal">
         <h3 class="font-headline-sm text-primary mb-4 flex items-center gap-2"><span class="material-symbols-outlined">engineering</span> Engineering &amp; Manufacturing</h3>
         <ul class="font-body-md text-on-surface-variant space-y-2">
           <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-[#7b2ff7]"></span> Fusion 360 &amp; CAD/CAM</li>
@@ -307,7 +285,7 @@
 </section>
 
 <!-- Contact -->
-<section class="py-20 relative bg-background/80 backdrop-blur-md" id="contact">
+<section class="py-20 relative" id="contact">
   <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
     <div class="flex items-center gap-4 mb-16 reveal">
       <span class="font-code-sm text-secondary text-sm">04.</span>
@@ -362,19 +340,7 @@
 </footer>
 
 <style>@keyframes spin{to{transform:rotate(360deg)}}@keyframes bounce{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,-8px)}}</style>
-<!-- Three.js (pinned CDN — vendor before launch) -->
-<script type="importmap">
-{
-  "imports": {
-    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
-  }
-}
-</script>
-<script type="module" src="assets/js/cinematic.js"></script>
 <script src="assets/js/vanilla-tilt.min.js" defer></script>
-<!-- Lenis smooth scroll (filmic scroll feel) -->
-<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
 <script src="assets/js/main.js" defer></script>
 </body>
 </html>

@@ -15,12 +15,7 @@
   --outline-variant: #3d484f;
 }
 
-/* Native smooth-scroll disabled — Lenis owns scroll smoothing (they fight if both on) */
 html { scroll-behavior: auto; }
-html.lenis, html.lenis body { height: auto; }
-.lenis.lenis-smooth { scroll-behavior: auto !important; }
-.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
-.lenis.lenis-stopped { overflow: clip; }
 
 body {
   background-color: var(--bg-deep);
@@ -28,142 +23,68 @@ body {
   overflow-x: hidden;
 }
 
-/* ---- Cinematic 3D world (Milestone 1) ---- */
-#cinematic-canvas {
+/* ---- Static professional backdrop (very subtle, no animation) ---- */
+.ambient-backdrop {
   position: fixed;
   inset: 0;
-  width: 100vw;
-  height: 100vh;
   z-index: -10;
-  display: block;
-  opacity: 0;
-  transition: opacity 1.2s ease-out;
-}
-#cinematic-canvas.ready { opacity: 1; }
-
-/* Fallback gradient (mobile / reduced-motion / no WebGL) — dusk palette */
-.cinematic-fallback {
-  position: fixed;
-  inset: 0;
-  z-index: -11;
-  background:
-    radial-gradient(110% 70% at 50% 88%, rgba(255, 93, 179, 0.30), transparent 60%),
-    radial-gradient(140% 90% at 50% 120%, rgba(255, 121, 198, 0.22), transparent 55%),
-    linear-gradient(180deg, #0a0712 0%, #140a22 55%, #2a0f33 100%);
-}
-body.cinematic-off #cinematic-canvas { display: none; }
-
-/* Film-grain + vignette overlay (kept subtle; complements WebGL grain) */
-.cinematic-grain {
-  position: fixed;
-  inset: 0;
-  z-index: -9;
   pointer-events: none;
   background:
-    radial-gradient(120% 120% at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
-  mix-blend-mode: multiply;
-}
-@media (prefers-reduced-motion: reduce) {
-  #cinematic-canvas { display: none; }
+    radial-gradient(60% 50% at 50% 0%, rgba(255,255,255,0.04), transparent 70%),
+    var(--bg-deep);
 }
 
-/* ---- Cinematic HUD overlay ---- */
-.hud-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--on-surface-variant);
-  margin-bottom: 1.4rem;
-}
+/* ---- Hero ---- */
 .hero-name {
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 700;
   line-height: 0.95;
   letter-spacing: -0.03em;
-  text-transform: uppercase;
-  font-size: clamp(2.6rem, 9vw, 7rem);
+  /* Fluid type so it adapts on every screen */
+  font-size: clamp(2.4rem, 8vw, 5.5rem);
   color: #fff;
-  text-shadow: 0 2px 40px rgba(255, 93, 179, 0.25);
-}
-.hud-panel {
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(10, 7, 18, 0.35);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  padding: 0.9rem 1rem;
-}
-.hud-panel-label,
-.hud-eyebrow,
-.scroll-rail + * {
-  font-family: 'JetBrains Mono', monospace;
-}
-.hud-panel-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.25em;
-  color: #ff5db3;
-  text-transform: uppercase;
 }
 
-/* Scroll cue rail */
-.scroll-rail {
-  position: relative;
-  width: 1px;
-  height: 42px;
-  background: rgba(255, 255, 255, 0.25);
-  overflow: hidden;
+/* ---- Clean buttons (a.btn-clean — higher specificity than Tailwind preflight) ---- */
+a.btn-clean, button.btn-clean {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.4rem !important;
+  border-radius: 6px !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  background: transparent;
+  color: var(--on-surface) !important;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none !important;
+  transition: border-color 180ms ease, background-color 180ms ease, color 180ms ease, transform 120ms ease;
 }
-.scroll-rail-dot {
-  position: absolute;
-  top: 0; left: -1.5px;
-  width: 4px; height: 10px;
-  background: #ff5db3;
-  box-shadow: 0 0 8px #ff5db3;
-  animation: railDrop 1.8s ease-in-out infinite;
+a.btn-clean:hover, button.btn-clean:hover {
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  background: rgba(255, 255, 255, 0.05);
 }
-@keyframes railDrop {
-  0% { transform: translateY(-12px); opacity: 0; }
-  40% { opacity: 1; }
-  100% { transform: translateY(42px); opacity: 0; }
+a.btn-clean--primary, button.btn-clean--primary {
+  background: #fff !important;
+  color: #0a0e14 !important;
+  border-color: #fff !important;
 }
-
-/* Right-edge progress rail (decorative) */
-.progress-rail {
-  position: fixed;
-  top: 0; right: 0;
-  width: 2px; height: 100%;
-  z-index: 40;
-  background: rgba(255, 255, 255, 0.06);
-}
-.progress-rail span {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 0%;
-  background: linear-gradient(#ff5db3, #7b2ff7);
-  box-shadow: 0 0 10px rgba(255, 93, 179, 0.6);
+a.btn-clean--primary:hover, button.btn-clean--primary:hover {
+  background: rgba(255, 255, 255, 0.92) !important;
 }
 
-/* Hero entrance */
-.reveal-now {
-  opacity: 0;
-  transform: translateY(24px);
-  animation: heroIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+/* ---- Clean cards ---- */
+.card-clean {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.015);
+  border-radius: 8px;
+  transition: border-color 200ms ease, background-color 200ms ease, transform 200ms ease;
 }
-.reveal-now:nth-child(1) { animation-delay: 1.9s; }
-.absolute .reveal-now:nth-child(1) { animation-delay: 2.0s; }
-.absolute .reveal-now:nth-child(2) { animation-delay: 2.15s; }
-.absolute .reveal-now:nth-child(3) { animation-delay: 2.35s; }
-@keyframes heroIn {
-  to { opacity: 1; transform: translateY(0); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .reveal-now { opacity: 1; transform: none; animation: none; }
-  .scroll-rail-dot { animation: none; }
+.card-clean:hover {
+  border-color: rgba(255, 255, 255, 0.20);
+  background: rgba(255, 255, 255, 0.03);
+  transform: translateY(-2px);
 }
 
 /* Custom cursor — only on devices with a fine pointer (mouse) */
