@@ -75,7 +75,7 @@
   </div>
 </section>
 
-<!-- Gallery placeholder (scaffolded for future screenshots) -->
+<!-- Gallery -->
 <section class="py-20">
   <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
     <div class="flex items-center gap-4 mb-12 reveal">
@@ -83,27 +83,45 @@
       <h2 class="font-headline-md text-headline-md uppercase tracking-wider">Product Tour</h2>
       <div class="h-px bg-outline-variant/30 flex-grow"></div>
     </div>
-    <!--
-      TODO: Drop DocTecq screenshots into ../assets/img/doctecq/ and replace this
-      placeholder block with .shot anchors (copy the pattern from kogmed.html),
-      then add the lightbox markup (also from kogmed.html) before </body>.
-    -->
-    <div class="glass-card rounded-lg p-16 text-center reveal">
-      <span class="material-symbols-outlined text-outline-variant text-5xl mb-4">image</span>
-      <h3 class="font-headline-sm text-lg mb-2 text-on-surface-variant">Screens coming soon</h3>
-      <p class="text-sm text-outline-variant max-w-md mx-auto">A captioned product tour of DocTecq PMS is being prepared. In the meantime, explore the live Kogmed gallery.</p>
-      <a class="btn-ghost px-6 py-2 font-code-sm text-sm uppercase tracking-wider hover-target inline-flex items-center gap-2 mt-6" href="kogmed.html">
-        <span class="material-symbols-outlined text-[16px]">visibility</span> View Kogmed gallery
-      </a>
+
+    <!-- Sign-in surfaces -->
+    <h3 class="font-code-sm text-xs uppercase tracking-[0.25em] text-outline-variant mb-4 reveal">Sign-in surfaces</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-16">
+      <a class="shot aspect-[16/10] reveal" data-lightbox href="../assets/img/doctecq/01-admin-login-desktop.png" data-caption="Admin / Clinician sign-in — branded split layout with secure credential flow"><img loading="lazy" src="../assets/img/doctecq/01-admin-login-desktop.png" alt="Admin login page — Healthcare, Simplified" /><figcaption>Admin sign-in — branded split layout</figcaption></a>
+      <a class="shot aspect-[16/10] reveal" data-lightbox href="../assets/img/doctecq/02-reception-login-desktop.png" data-caption="Reception staff sign-in — dedicated front-desk module access (appointments · queue · records)"><img loading="lazy" src="../assets/img/doctecq/02-reception-login-desktop.png" alt="Reception login page" /><figcaption>Reception sign-in — front-desk module</figcaption></a>
     </div>
 
-    <div class="mt-20 text-center reveal">
+    <!-- Dashboards -->
+    <h3 class="font-code-sm text-xs uppercase tracking-[0.25em] text-outline-variant mb-4 reveal">Operational dashboard — light &amp; dark</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-16">
+      <a class="shot aspect-[16/10] reveal" data-lightbox href="../assets/img/doctecq/04-dashboard-light-desktop.png" data-caption="Operational dashboard (light) — KPIs, quick actions, new-patient registration & live appointment queue"><img loading="lazy" src="../assets/img/doctecq/04-dashboard-light-desktop.png" alt="DocTecq operational dashboard light mode" /><figcaption>Operational dashboard — light theme</figcaption></a>
+      <a class="shot aspect-[16/10] reveal" data-lightbox href="../assets/img/doctecq/05-dashboard-dark-desktop.png" data-caption="Operational dashboard (dark) — same workflows, full theming support across the platform"><img loading="lazy" src="../assets/img/doctecq/05-dashboard-dark-desktop.png" alt="DocTecq operational dashboard dark mode" /><figcaption>Operational dashboard — dark theme</figcaption></a>
+    </div>
+
+    <!-- Patient + Settings -->
+    <h3 class="font-code-sm text-xs uppercase tracking-[0.25em] text-outline-variant mb-4 reveal">Patient portal &amp; clinic settings</h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-16">
+      <a class="shot aspect-[9/16] md:aspect-[9/16] reveal" data-lightbox href="../assets/img/doctecq/03-patient-portal-mobile.png" data-caption="Patient portal (mobile) — login, registration, and walk-in appointment booking without account"><img loading="lazy" src="../assets/img/doctecq/03-patient-portal-mobile.png" alt="Patient portal mobile view" /><figcaption>Patient portal — mobile-first PWA</figcaption></a>
+      <a class="shot aspect-[16/10] reveal" data-lightbox href="../assets/img/doctecq/06-settings-desktop.png" data-caption="Clinic settings — locations, doctors, file numbering, examination templates, letterhead & user/role management"><img loading="lazy" src="../assets/img/doctecq/06-settings-desktop.png" alt="DocTecq clinic settings" /><figcaption>Clinic settings — multi-location &amp; roles</figcaption></a>
+    </div>
+
+    <div class="mt-12 text-center reveal">
       <a class="btn-ghost px-8 py-3 font-code-sm text-sm uppercase tracking-wider hover-target inline-flex items-center gap-2" href="../index.html#projects">
         <span class="material-symbols-outlined text-[18px]">arrow_back</span> Back to all projects
       </a>
     </div>
   </div>
 </section>
+
+<!-- Lightbox -->
+<div id="lightbox" aria-hidden="true">
+  <span class="lb-counter" id="lb-counter"></span>
+  <button class="lb-btn lb-close" aria-label="Close"><span class="material-symbols-outlined">close</span></button>
+  <button class="lb-btn lb-prev" aria-label="Previous"><span class="material-symbols-outlined">chevron_left</span></button>
+  <button class="lb-btn lb-next" aria-label="Next"><span class="material-symbols-outlined">chevron_right</span></button>
+  <img id="lb-img" src="" alt="" />
+  <div class="lb-caption" id="lb-caption"></div>
+</div>
 
 <footer class="border-t border-outline-variant/30 py-8 bg-surface-container-lowest/40">
   <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-4">
