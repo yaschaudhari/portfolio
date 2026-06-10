@@ -135,6 +135,57 @@
     });
   })();
 
+  /* ---------- Contact form: Netlify first, mailto fallback ---------- */
+  (function contactForm() {
+    var form = document.getElementById("contact-form");
+    if (!form) return;
+    var EMAIL = "yashchaudhari5055@gmail.com";
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      var data = new FormData(form);
+      var name = (data.get("name") || "").toString().trim();
+      var email = (data.get("email") || "").toString().trim();
+      var message = (data.get("message") || "").toString().trim();
+
+      // 1) Try Netlify Forms (works on Git-deployed sites)
+      var body = new URLSearchParams(data).toString();
+      fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: body
+      }).then(function (r) {
+        if (r.ok || r.redirected) {
+          window.location.href = "/thanks.html";
+          return;
+        }
+        // 2) Netlify didn't accept (404 / 500 / form not detected) — fall back to mailto
+        mailtoFallback();
+      }).catch(function () {
+        // Offline or network error — same fallback
+        mailtoFallback();
+      });
+
+      function mailtoFallback() {
+        var subject = "Portfolio inquiry from " + (name || "(no name)");
+        var lines = [
+          "Name:    " + name,
+          "Email:   " + email,
+          "",
+          "Message:",
+          message,
+          "",
+          "(Sent from yash-chaudhari.netlify.app)"
+        ].join("\r\n");
+        var href = "mailto:" + EMAIL +
+          "?subject=" + encodeURIComponent(subject) +
+          "&body=" + encodeURIComponent(lines);
+        window.location.href = href;
+      }
+    });
+  })();
+
   /* ---------- Typewriter (hero) ---------- */
   (function typewriter() {
     var el = document.getElementById("typewriter-text");
